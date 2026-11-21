@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quân Nhã Uyển — Thư viện phim</title>
+<style>
+:root{--bg:#101116;--panel:#1a1c24;--muted:#a9aab5;--text:#f6f3f0;--pink:#d9a7b7;--gold:#d8bd8a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#111218ed;border-bottom:1px solid #ffffff12;backdrop-filter:blur(12px)}
+.nav{max-width:1150px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.brand{font-family:Georgia,serif;font-size:22px;color:var(--gold);white-space:nowrap}.brand b{color:var(--pink)}
+nav{display:flex;gap:16px;flex:1}nav a{color:#ddd;text-decoration:none;font-size:14px}nav a:hover{color:var(--gold)}
+.search{max-width:220px;width:100%;background:#232530;border:1px solid #393b48;color:white;border-radius:20px;padding:9px 13px}
+.account{border:1px solid #665b4a;border-radius:18px;color:var(--gold);padding:8px 13px;white-space:nowrap}
+main{max-width:1150px;margin:auto;padding:24px 20px 60px}
+.hero{min-height:250px;border-radius:20px;padding:35px;display:flex;align-items:end;background:linear-gradient(90deg,#17151c 0%,#17151cdd 42%,#17151c22 100%),linear-gradient(135deg,#60414f,#252637 55%,#9a7765);overflow:hidden}
+.eyebrow{color:var(--pink);letter-spacing:2px;text-transform:uppercase;font-size:11px}.hero h1{font:36px Georgia,serif;margin:8px 0}.hero p{color:#ded9dc;max-width:520px;margin:0 0 18px}
+.btn{display:inline-block;border:0;border-radius:22px;padding:10px 18px;background:var(--pink);color:#211820;font-weight:bold;text-decoration:none;cursor:pointer}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:30px 0 14px}.section-head h2{font:24px Georgia,serif;margin:0}.section-head span{color:var(--muted);font-size:13px}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}.chip{border:1px solid #3a3b46;background:#1b1d25;color:#ddd;padding:7px 13px;border-radius:20px;cursor:pointer}.chip.active{background:#4b3541;border-color:var(--pink);color:white}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.card{background:var(--panel);border:1px solid #ffffff0d;border-radius:13px;overflow:hidden;cursor:pointer;transition:.18s}.card:hover{transform:translateY(-3px);border-color:#b88d9c}
+.poster{height:205px;display:flex;align-items:end;padding:12px;background:linear-gradient(145deg,#57414c,#252b3b 60%,#8c6a5d);position:relative}.poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0009,transparent 65%)}.poster strong{z-index:1;font:17px Georgia,serif;text-shadow:0 2px 5px #000}
+.card-info{padding:11px}.card-info h3{font-size:14px;margin:0 0 5px}.meta{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;margin-top:8px;font-size:10px;color:var(--gold);border:1px solid #75664c;border-radius:10px;padding:2px 7px}
+footer{border-top:1px solid #ffffff12;color:var(--muted);text-align:center;padding:24px;font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px}.modal.show{display:flex}.dialog{max-width:520px;width:100%;background:#1c1e27;border:1px solid #ffffff20;border-radius:18px;padding:23px;position:relative}.close{position:absolute;right:15px;top:12px;background:none;border:0;color:white;font-size:24px;cursor:pointer}.dialog h2{font:26px Georgia,serif;color:var(--gold);margin:5px 30px 8px 0}.dialog p{color:#c6c4cb}.notice{background:#30252d;border:1px solid #745263;border-radius:10px;padding:12px;color:#f0dce4;font-size:13px;margin-top:15px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(3,1fr)}nav{display:none}.search{margin-left:auto}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<div class="brand"><b>Q</b> Quân Nhã Uyển</div>
+<nav><a href="#">Trang chủ</a><a href="#new">Phim mới</a><a href="#series">Phim bộ</a><a href="#movies">Phim lẻ</a></nav>
+<input id="search" class="search" placeholder="Tìm tên phim..." aria-label="Tìm phim">
+<div class="account" id="accountBtn">Tài khoản</div>
+</div></header>
+<main>
+<section class="hero">
+<div><div class="eyebrow">Thư viện phim Trung Quốc Vietsub</div><h1>Một góc phim, một miền cảm xúc</h1>
+<p>Khám phá những câu chuyện cổ trang, ngôn tình và hiện đại được tuyển chọn tại Quân Nhã Uyển.</p>
+<a class="btn" href="#new">Khám phá phim</a></div>
+</section>
+<div class="section-head" id="new"><h2>Phim mới cập nhật</h2><span id="count">6 tác phẩm</span></div>
+<div class="filters">
+<button class="chip active" data-filter="Tất cả">Tất cả</button><button class="chip" data-filter="Phim bộ">Phim bộ</button><button class="chip" data-filter="Phim lẻ">Phim lẻ</button><button class="chip" data-filter="Cổ trang">Cổ trang</button><button class="chip" data-filter="Hiện đại">Hiện đại</button>
+</div>
+<section class="grid" id="grid"></section>
+</main>
+<footer>QUÂN NHÃ UYỂN · Thư viện phim Vietsub<br>Giao diện bản mẫu — nội dung phim chỉ là dữ liệu minh họa.</footer>
+<div class="modal" id="modal"><div class="dialog"><button class="close" id="close">×</button><div class="eyebrow">Thông tin tác phẩm</div><h2 id="modalTitle"></h2><div class="meta" id="modalMeta"></div><p id="modalDesc"></p><div class="notice">Đây là bản giao diện thử nghiệm. Khi hoàn thiện, hệ thống sẽ kiểm tra thời hạn thành viên trước khi phát video.</div></div></div>
+<script>
+const films=[
+ {title:"Hoa Rơi Bên Thềm Ngọc",type:"Phim bộ",genre:"Cổ trang",episodes:"36 tập",desc:"Một câu chuyện tình cảm giữa chốn cung đình đầy bí mật."},
+ {title:"Ngày Gặp Lại Thanh Xuân",type:"Phim bộ",genre:"Hiện đại",episodes:"24 tập",desc:"Hai người bạn cũ gặp lại và viết tiếp câu chuyện còn dang dở."},
+ {title:"Trường An Mộng",type:"Phim lẻ",genre:"Cổ trang",episodes:"Phim lẻ",desc:"Hành trình tìm lại sự thật giữa kinh thành hoa lệ."},
+ {title:"Mùa Hạ Có Em",type:"Phim bộ",genre:"Hiện đại",episodes:"30 tập",desc:"Một chuyện tình nhẹ nhàng bắt đầu từ những điều bình dị."},
+ {title:"Khúc Hát Sơn Hà",type:"Phim lẻ",genre:"Cổ trang",episodes:"Phim lẻ",desc:"Tình thân, lòng can đảm và lựa chọn giữa thời loạn."},
+ {title:"Hẹn Ước Dưới Mưa",type:"Phim bộ",genre:"Hiện đại",episodes:"20 tập",desc:"Một cuộc gặp tình cờ làm thay đổi cuộc sống của hai con người."}
+];
+let filter="Tất cả";
+function render(){const q=document.getElementById('search').value.toLowerCase();const data=films.filter(f=>(filter==="Tất cả"||f.type===filter||f.genre===filter)&&f.title.toLowerCase().includes(q));document.getElementById('count').textContent=data.length+" tác phẩm";document.getElementById('grid').innerHTML=data.map((f,i)=>`<article class="card" data-index="${films.indexOf(f)}"><div class="poster"><strong>${f.title}</strong></div><div class="card-info"><h3>${f.title}</h3><div class="meta">${f.genre} · ${f.episodes}</div><span class="tag">${f.type}</span></div></article>`).join('');document.querySelectorAll('.card').forEach(c=>c.onclick=()=>openFilm(+c.dataset.index));}
+function openFilm(i){const f=films[i];document.getElementById('modalTitle').textContent=f.title;document.getElementById('modalMeta').textContent=f.genre+" · "+f.type+" · "+f.episodes;document.getElementById('modalDesc').textContent=f.desc;document.getElementById('modal').classList.add('show')}
+document.getElementById('search').addEventListener('input',render);
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()});
+document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('show');
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')};
+document.getElementById('accountBtn').onclick=()=>alert('Khi kết nối Telegram, khu vực này sẽ hiển thị tài khoản và thời hạn thành viên.');
+render();
+</script>
+</body></html>
