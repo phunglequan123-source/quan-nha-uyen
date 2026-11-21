@@ -211,4 +211,414 @@ background:linear-gradient(0deg,#0009,transparent 65%)
 }
 
 .poster strong{
-z
+z-index:1;
+font:17px Georgia,serif;
+text-shadow:0 2px 5px #000
+}
+
+.card-info{padding:11px}
+
+.card-info h3{
+font-size:14px;
+margin:0 0 5px
+}
+
+.meta{
+font-size:12px;
+color:var(--muted)
+}
+
+.tag{
+display:inline-block;
+margin-top:8px;
+font-size:10px;
+color:var(--gold);
+border:1px solid #75664c;
+border-radius:10px;
+padding:2px 7px
+}
+
+.message{
+text-align:center;
+padding:35px 15px;
+color:var(--muted);
+grid-column:1/-1
+}
+
+footer{
+border-top:1px solid #ffffff12;
+color:var(--muted);
+text-align:center;
+padding:24px;
+font-size:12px
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#000b;
+z-index:10;
+align-items:center;
+justify-content:center;
+padding:18px
+}
+
+.modal.show{display:flex}
+
+.dialog{
+max-width:520px;
+width:100%;
+background:#1c1e27;
+border:1px solid #ffffff20;
+border-radius:18px;
+padding:23px;
+position:relative
+}
+
+.close{
+position:absolute;
+right:15px;
+top:12px;
+background:none;
+border:0;
+color:white;
+font-size:24px;
+cursor:pointer
+}
+
+.dialog h2{
+font:26px Georgia,serif;
+color:var(--gold);
+margin:5px 30px 8px 0
+}
+
+.dialog p{color:#c6c4cb}
+
+.notice{
+background:#30252d;
+border:1px solid #745263;
+border-radius:10px;
+padding:12px;
+color:#f0dce4;
+font-size:13px;
+margin-top:15px
+}
+
+@media(max-width:850px){
+.grid{grid-template-columns:repeat(3,1fr)}
+nav{display:none}
+.search{margin-left:auto}
+}
+
+@media(max-width:520px){
+.grid{
+grid-template-columns:repeat(2,1fr);
+gap:11px
+}
+
+.poster{height:170px}
+.hero{padding:24px;min-height:230px}
+.hero h1{font-size:29px}
+.search{max-width:125px}
+.brand{font-size:18px}
+.account{font-size:12px;padding:7px 9px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+
+<div class="brand"><b>Q</b> Quân Nhã Uyển</div>
+
+<nav>
+<a href="#">Trang chủ</a>
+<a href="#new">Cập nhật mới nhất</a>
+<a href="#full">Phim Full</a>
+</nav>
+
+<input
+id="search"
+class="search"
+placeholder="Tìm tên phim..."
+aria-label="Tìm phim"
+>
+
+<div class="account" id="accountBtn">Tài khoản</div>
+
+</div>
+</header>
+
+<main>
+
+<section class="hero">
+<div>
+<div class="eyebrow">Thư viện phim Trung Quốc Vietsub</div>
+
+<h1>Một góc phim, một miền cảm xúc</h1>
+
+<p>
+Khám phá những câu chuyện cổ trang, ngôn tình và hiện đại
+được tuyển chọn tại Quân Nhã Uyển.
+</p>
+<a class="btn" href="#new">Khám phá phim</a>
+</div>
+</section>
+
+<div class="section-head" id="new">
+<h2>Cập nhật mới nhất</h2>
+<span id="count">Đang tải...</span>
+</div>
+
+<div class="filters">
+
+<button class="chip active" data-filter="Tất cả">Tất cả</button>
+<button class="chip" data-filter="Phim bộ">Phim bộ</button>
+<button class="chip" data-filter="Phim lẻ">Phim lẻ</button>
+<button class="chip" data-filter="Cổ trang">Cổ trang</button>
+<button class="chip" data-filter="Hiện đại">Hiện đại</button>
+
+</div>
+
+<section class="grid" id="grid">
+<div class="message">Đang tải danh sách phim...</div>
+</section>
+
+<div class="section-head" id="full">
+<h2>Phim Full</h2>
+<span>Quân Nhã Uyển</span>
+</div>
+
+</main>
+
+<footer>
+QUÂN NHÃ UYỂN · Thư viện phim Vietsub
+<br>
+Nội dung hiển thị từ thư viện phim.
+</footer>
+
+<div class="modal" id="modal">
+
+<div class="dialog">
+
+<button class="close" id="close">×</button>
+
+<div class="eyebrow">Thông tin tác phẩm</div>
+
+<h2 id="modalTitle"></h2>
+
+<div class="meta" id="modalMeta"></div>
+
+<p id="modalDesc"></p>
+
+<div class="notice">
+Thông tin phát video và quyền xem sẽ được bổ sung
+khi hoàn thiện hệ thống thành viên.
+</div>
+
+</div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://hdtoeobfjzshklcjsosm.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_vAW0c92jjDoi__5UFAwEkA_qrIYK0MZ";
+
+const supabaseClient = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+let films = [];
+let filter = "Tất cả";
+
+const grid = document.getElementById("grid");
+
+function render(){
+
+const q = document.getElementById("search").value.toLowerCase();
+
+const data = films.filter(f => {
+
+const title = (f.Title || "").toLowerCase();
+const type = f.film_type || "";
+const genre = f.section || "";
+
+const matchFilter =
+filter === "Tất cả" ||
+type === filter ||
+genre === filter;
+
+return matchFilter && title.includes(q);
+
+});
+
+document.getElementById("count").textContent =
+data.length + " tác phẩm";
+
+grid.innerHTML = "";
+
+if(data.length === 0){
+
+const msg = document.createElement("div");
+msg.className = "message";
+msg.textContent = films.length
+? "Không tìm thấy phim phù hợp."
+: "Thư viện hiện chưa có phim.";
+
+grid.appendChild(msg);
+return;
+
+}
+
+data.forEach(f => {
+
+const card = document.createElement("article");
+card.className = "card";
+
+const poster = document.createElement("div");
+poster.className = "poster";
+
+const titleOnPoster = document.createElement("strong");
+titleOnPoster.textContent = f.Title || "Chưa có tên phim";
+
+poster.appendChild(titleOnPoster);
+
+if(f.poster_url){
+
+try{
+
+const posterUrl = new URL(f.poster_url);
+
+if(posterUrl.protocol === "https:" || posterUrl.protocol === "http:"){
+poster.style.backgroundImage =
+`linear-gradient(0deg,#0009,transparent 65%),url("${posterUrl.href}")`;
+}
+
+}catch(e){}
+
+}
+
+const info = document.createElement("div");
+info.className = "card-info";
+const title = document.createElement("h3");
+title.textContent = f.Title || "Chưa có tên phim";
+
+const meta = document.createElement("div");
+meta.className = "meta";
+meta.textContent =
+(f.section || "Chưa phân loại") +
+" · " +
+(f.film_type || "Chưa xác định");
+
+const tag = document.createElement("span");
+tag.className = "tag";
+tag.textContent = f.film_type || "Phim";
+
+info.appendChild(title);
+info.appendChild(meta);
+info.appendChild(tag);
+
+card.appendChild(poster);
+card.appendChild(info);
+
+card.addEventListener("click", () => openFilm(f));
+
+grid.appendChild(card);
+
+});
+
+}
+
+async function loadFilms(){
+
+grid.innerHTML =
+'<div class="message">Đang tải danh sách phim...</div>';
+
+const { data, error } = await supabaseClient
+.from("Films")
+.select('id, "Title", created_at, poster_url, description, section, film_type, status')
+.order("created_at", { ascending:false });
+
+if(error){
+
+console.error("Supabase error:", error);
+
+grid.innerHTML =
+'<div class="message">Không tải được danh sách phim. Vui lòng kiểm tra kết nối Supabase.</div>';
+
+document.getElementById("count").textContent = "Lỗi tải dữ liệu";
+
+return;
+
+}
+
+films = data || [];
+
+render();
+
+}
+
+function openFilm(f){
+
+document.getElementById("modalTitle").textContent =
+f.Title || "";
+
+document.getElementById("modalMeta").textContent =
+(f.section || "") + " · " + (f.film_type || "");
+
+document.getElementById("modalDesc").textContent =
+f.description || "Chưa có mô tả.";
+
+document.getElementById("modal").classList.add("show");
+
+}
+
+document.getElementById("search").addEventListener("input",render);
+
+document.querySelectorAll(".chip").forEach(button => {
+
+button.addEventListener("click", () => {
+
+document.querySelectorAll(".chip").forEach(x =>
+x.classList.remove("active")
+);
+
+button.classList.add("active");
+
+filter = button.dataset.filter;
+
+render();
+
+});
+
+});
+
+document.getElementById("close").onclick = () => {
+document.getElementById("modal").classList.remove("show");
+};
+
+document.getElementById("modal").onclick = e => {
+
+if(e.target.id === "modal"){
+e.currentTarget.classList.remove("show");
+}
+
+};
+
+document.getElementById("accountBtn").onclick = () => {
+
+alert("Chức năng tài khoản thành viên sẽ được kết nối ở bước tiếp theo.");
+
+};
+
+loadFilms();
+
+</script>
+
+</body>
+</html>
+
