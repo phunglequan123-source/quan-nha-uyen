@@ -4,165 +4,73 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quân Nhã Uyển — Thư viện phim</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
-:root{
---bg:#101116;
---panel:#1a1c24;
---muted:#a9aab5;
---text:#f6f3f0;
---pink:#d9a7b7;
---gold:#d8bd8a
-}
+:root{--bg:#101116;--panel:#1a1c24;--muted:#a9aab5;--text:#f6f3f0;--pink:#d9a7b7;--gold:#d8bd8a}
 *{box-sizing:border-box}
-body{
-margin:0;background:var(--bg);color:var(--text);
-font:15px/1.5 Arial,sans-serif
-}
-header{
-position:sticky;top:0;z-index:5;background:#111218ed;
-border-bottom:1px solid #ffffff12;backdrop-filter:blur(12px)
-}
-.nav{
-max-width:1150px;margin:auto;padding:14px 20px;
-display:flex;align-items:center;gap:18px
-}
-.brand{
-font-family:Georgia,serif;font-size:22px;
-color:var(--gold);white-space:nowrap
-}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#111218ed;border-bottom:1px solid #ffffff12;backdrop-filter:blur(12px)}
+.nav{max-width:1150px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.brand{font-family:Georgia,serif;font-size:22px;color:var(--gold);white-space:nowrap}
 .brand b{color:var(--pink)}
 nav{display:flex;gap:16px;flex:1}
 nav a{color:#ddd;text-decoration:none;font-size:14px}
-nav a:hover{color:var(--gold)}
-.search{
-max-width:220px;width:100%;background:#232530;
-border:1px solid #393b48;color:white;border-radius:20px;
-padding:9px 13px
-}
-.account{
-border:1px solid #665b4a;border-radius:18px;
-color:var(--gold);padding:8px 13px;
-white-space:nowrap;cursor:pointer
-}
+.search{max-width:220px;width:100%;background:#232530;border:1px solid #393b48;color:white;border-radius:20px;padding:9px 13px}
+.account{border:1px solid #665b4a;border-radius:18px;color:var(--gold);padding:8px 13px;white-space:nowrap;cursor:pointer;background:transparent}
 main{max-width:1150px;margin:auto;padding:24px 20px 60px}
-.hero{
-min-height:250px;border-radius:20px;padding:35px;
-display:flex;align-items:end;
-background:linear-gradient(90deg,#17151c 0%,#17151cdd 42%,#17151c22 100%),
-linear-gradient(135deg,#60414f,#252637 55%,#9a7765);
-overflow:hidden
-}
-.eyebrow{
-color:var(--pink);letter-spacing:2px;
-text-transform:uppercase;font-size:11px
-}
+.hero{min-height:250px;border-radius:20px;padding:35px;display:flex;align-items:end;background:linear-gradient(90deg,#17151c 0%,#17151cdd 42%,#17151c22 100%),linear-gradient(135deg,#60414f,#252637 55%,#9a7765);overflow:hidden}
+.eyebrow{color:var(--pink);letter-spacing:2px;text-transform:uppercase;font-size:11px}
 .hero h1{font:36px Georgia,serif;margin:8px 0}
 .hero p{color:#ded9dc;max-width:520px;margin:0 0 18px}
-.btn{
-display:inline-block;border:0;border-radius:22px;
-padding:10px 18px;background:var(--pink);
-color:#211820;font-weight:bold;text-decoration:none;cursor:pointer
-}
-.section-head{
-display:flex;justify-content:space-between;
-align-items:center;margin:30px 0 14px
-}
+.btn{display:inline-block;border:0;border-radius:22px;padding:10px 18px;background:var(--pink);color:#211820;font-weight:bold;text-decoration:none;cursor:pointer}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:30px 0 14px}
 .section-head h2{font:24px Georgia,serif;margin:0}
 .section-head span{color:var(--muted);font-size:13px}
 .filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
-.chip{
-border:1px solid #3a3b46;background:#1b1d25;color:#ddd;
-padding:7px 13px;border-radius:20px;cursor:pointer
-}
+.chip{border:1px solid #3a3b46;background:#1b1d25;color:#ddd;padding:7px 13px;border-radius:20px;cursor:pointer}
 .chip.active{background:#4b3541;border-color:var(--pink);color:white}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-.card{
-background:var(--panel);border:1px solid #ffffff0d;
-border-radius:13px;overflow:hidden;cursor:pointer;transition:.18s
-}
+.card{background:var(--panel);border:1px solid #ffffff0d;border-radius:13px;overflow:hidden;cursor:pointer;transition:.18s}
 .card:hover{transform:translateY(-3px);border-color:#b88d9c}
-.poster{
-height:205px;display:flex;align-items:end;padding:12px;
-background:linear-gradient(145deg,#57414c,#252b3b 60%,#8c6a5d);
-background-size:cover;background-position:center;position:relative
-}
-.poster:after{
-content:"";position:absolute;inset:0;
-background:linear-gradient(0deg,#0009,transparent 65%)
-}
-.poster strong{
-z-index:1;font:17px Georgia,serif;text-shadow:0 2px 5px #000
-}
+.poster{height:205px;display:flex;align-items:end;padding:12px;background:linear-gradient(145deg,#57414c,#252b3b 60%,#8c6a5d);background-size:cover;background-position:center;position:relative}
+.poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0009,transparent 65%)}
+.poster strong{z-index:1;font:17px Georgia,serif;text-shadow:0 2px 5px #000}
 .card-info{padding:11px}
 .card-info h3{font-size:14px;margin:0 0 5px}
 .meta{font-size:12px;color:var(--muted)}
-.tag{
-display:inline-block;margin-top:8px;font-size:10px;
-color:var(--gold);border:1px solid #75664c;
-border-radius:10px;padding:2px 7px
-}
-.message{
-text-align:center;padding:35px 15px;
-color:var(--muted);grid-column:1/-1
-}
-footer{
-border-top:1px solid #ffffff12;color:var(--muted);
-text-align:center;padding:24px;font-size:12px
-}
-.modal{
-display:none;position:fixed;inset:0;background:#000b;
-z-index:10;align-items:center;justify-content:center;padding:18px
-}
+.tag{display:inline-block;margin-top:8px;font-size:10px;color:var(--gold);border:1px solid #75664c;border-radius:10px;padding:2px 7px}
+.message{text-align:center;padding:35px 15px;color:var(--muted);grid-column:1/-1}
+footer{border-top:1px solid #ffffff12;color:var(--muted);text-align:center;padding:24px;font-size:12px}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal.show{display:flex}
-.dialog{
-max-width:520px;width:100%;background:#1c1e27;
-border:1px solid #ffffff20;border-radius:18px;
-padding:23px;position:relative
-}
-.close{
-position:absolute;right:15px;top:12px;background:none;
-border:0;color:white;font-size:24px;cursor:pointer
-}
-.dialog h2{
-font:26px Georgia,serif;color:var(--gold);
-margin:5px 30px 8px 0
-}
+.dialog{max-width:520px;width:100%;max-height:90vh;overflow:auto;background:#1c1e27;border:1px solid #ffffff20;border-radius:18px;padding:23px;position:relative}
+.close{position:absolute;right:15px;top:12px;background:none;border:0;color:white;font-size:24px;cursor:pointer}
+.dialog h2{font:26px Georgia,serif;color:var(--gold);margin:5px 30px 8px 0}
 .dialog p{color:#c6c4cb}
-.notice{
-background:#30252d;border:1px solid #745263;
-border-radius:10px;padding:12px;color:#f0dce4;
-font-size:13px;margin-top:15px
-}
-@media(max-width:850px){
-.grid{grid-template-columns:repeat(3,1fr)}
-nav{display:none}
-.search{margin-left:auto}
-}
-@media(max-width:520px){
-.grid{grid-template-columns:repeat(2,1fr);gap:11px}
-.poster{height:170px}
-.hero{padding:24px;min-height:230px}
-.hero h1{font-size:29px}
-.search{max-width:125px}
-.brand{font-size:18px}
-.account{font-size:12px;padding:7px 9px}
-}
+.notice{background:#30252d;border:1px solid #745263;border-radius:10px;padding:12px;color:#f0dce4;font-size:13px;margin-top:15px}
+#adminPanel{display:none;margin-top:30px;background:#1a1c24;border:1px solid #665b4a;border-radius:16px;padding:20px}
+.admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.admin-tabs button,.action-btn{background:#302832;color:#f5e8ed;border:1px solid #765466;border-radius:9px;padding:9px 13px;cursor:pointer}
+.admin-tabs button.active{background:#704b5c}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.admin-item{background:#242630;border:1px solid #ffffff12;border-radius:10px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.admin-item p{margin:4px 0;color:#d4d0d5;font-size:13px}
+.admin-item button{margin:7px 6px 0 0}
+.danger{background:#492b35!important;border-color:#9b596b!important}
+.field{display:block;width:100%;margin:8px 0 13px;padding:11px;border-radius:8px;border:1px solid #484957;background:#111218;color:white}
+.admin-label{color:var(--gold);font-size:13px}
+.admin-status{color:var(--pink);font-size:13px;margin:10px 0}
+@media(max-width:850px){.grid{grid-template-columns:repeat(3,1fr)}nav{display:none}.search{margin-left:auto}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}#adminPanel{padding:13px}}
 </style>
 </head>
-
 <body>
 <header>
 <div class="nav">
 <div class="brand"><b>Q</b> Quân Nhã Uyển</div>
-<nav>
-<a href="#">Trang chủ</a>
-<a href="#new">Cập nhật mới nhất</a>
-<a href="#full">Phim Full</a>
-</nav>
+<nav><a href="#">Trang chủ</a><a href="#new">Cập nhật mới nhất</a><a href="#full">Phim Full</a></nav>
 <input id="search" class="search" placeholder="Tìm tên phim..." aria-label="Tìm phim">
 <button class="account" id="accountBtn">Tài khoản</button>
 </div>
@@ -178,11 +86,7 @@ nav{display:none}
 </div>
 </section>
 
-<div class="section-head" id="new">
-<h2>Cập nhật mới nhất</h2>
-<span id="count">Đang tải...</span>
-</div>
-
+<div class="section-head" id="new"><h2>Cập nhật mới nhất</h2><span id="count">Đang tải...</span></div>
 <div class="filters">
 <button class="chip active" data-filter="Tất cả">Tất cả</button>
 <button class="chip" data-filter="Phim bộ">Phim bộ</button>
@@ -190,21 +94,51 @@ nav{display:none}
 <button class="chip" data-filter="Cổ trang">Cổ trang</button>
 <button class="chip" data-filter="Hiện đại">Hiện đại</button>
 </div>
+<section class="grid" id="grid"><div class="message">Đang tải danh sách phim...</div></section>
+<div class="section-head" id="full"><h2>Phim Full</h2><span>Quân Nhã Uyển</span></div>
 
-<section class="grid" id="grid">
-<div class="message">Đang tải danh sách phim...</div>
-</section>
-
-<div class="section-head" id="full">
-<h2>Phim Full</h2>
-<span>Quân Nhã Uyển</span>
+<section id="adminPanel">
+<h2 style="font:25px Georgia,serif;color:var(--gold);margin:0">Quản trị Quân Nhã Uyển</h2>
+<div class="admin-status" id="adminStatus">Đang kết nối...</div>
+<div class="admin-tabs">
+<button class="active" data-tab="paymentsSection">Thanh toán</button>
+<button data-tab="membersSection">Hội viên</button>
+<button data-tab="compensateSection">Bù ngày</button>
 </div>
+
+<div class="admin-section active" id="paymentsSection">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+<strong>Giao dịch chờ duyệt</strong>
+<button class="action-btn" id="refreshPayments">Làm mới</button>
+</div>
+<div id="paymentsList"><p class="meta">Đang tải...</p></div>
+</div>
+
+<div class="admin-section" id="membersSection">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+<strong>Danh sách hội viên</strong>
+<button class="action-btn" id="refreshMembers">Làm mới</button>
+</div>
+<div id="membersList"><p class="meta">Đang tải...</p></div>
+</div>
+
+<div class="admin-section" id="compensateSection">
+<strong>Bù ngày thành viên</strong>
+<p class="meta">Nhập Telegram ID của hội viên và số ngày muốn bù.</p>
+<label class="admin-label" for="compTelegram">Telegram ID</label>
+<input class="field" id="compTelegram" type="number" placeholder="Ví dụ: 123456789">
+<label class="admin-label" for="compDays">Số ngày bù</label>
+<input class="field" id="compDays" type="number" min="1" max="3650" placeholder="Ví dụ: 30">
+<label class="admin-label" for="compReason">Lý do bù ngày</label>
+<input class="field" id="compReason" type="text" maxlength="250" placeholder="Ví dụ: Tặng hội viên">
+<button class="action-btn" id="compensateBtn">Xác nhận bù ngày</button>
+<button class="action-btn" id="historyBtn">Xem lịch sử bù ngày</button>
+<div id="historyList"></div>
+</div>
+</section>
 </main>
 
-<footer>
-QUÂN NHÃ UYỂN · Thư viện phim Vietsub
-<br>Nội dung hiển thị từ thư viện phim.
-</footer>
+<footer>QUÂN NHÃ UYỂN · Thư viện phim Vietsub<br>Nội dung hiển thị từ thư viện phim.</footer>
 
 <div class="modal" id="modal">
 <div class="dialog">
@@ -213,224 +147,246 @@ QUÂN NHÃ UYỂN · Thư viện phim Vietsub
 <h2 id="modalTitle"></h2>
 <div class="meta" id="modalMeta"></div>
 <p id="modalDesc"></p>
-<div class="notice">
-Thông tin phát video và quyền xem sẽ được bổ sung khi hoàn thiện hệ thống thành viên.
-</div>
+<div class="notice">Thông tin phát video và quyền xem sẽ được bổ sung khi hoàn thiện hệ thống thành viên.</div>
 </div>
 </div>
 
 <script>
-/* KẾT NỐI SUPABASE */
-const SUPABASE_URL = "https://hdtoeobfjzshklcjsosm.supabase.co";
-const SUPABASE_KEY = "sb_publishable_vAW0c92jjDoi__5UFAwEkA_qrIYK0MZ";
+const SUPABASE_URL="https://hdtoeobfjzshklcjsosm.supabase.co";
+const SUPABASE_KEY="sb_publishable_vAW0c92jjDoi__5UFAwEkA_qrIYK0MZ";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+let films=[];
+let filter="Tất cả";
+let isAdmin=false;
+const grid=document.getElementById("grid");
 
-/* KẾT NỐI TELEGRAM MINI APP */
-const tg = window.Telegram?.WebApp;
-
-if (tg) {
-  tg.ready();
-  tg.expand();
-}
-
-/* DỮ LIỆU PHIM */
-let films = [];
-let filter = "Tất cả";
-
-const grid = document.getElementById("grid");
-
-function render() {
-  const q = document.getElementById("search").value.toLowerCase();
-
-  const data = films.filter(f => {
-    const title = (f.Title || "").toLowerCase();
-    const type = f.film_type || "";
-    const genre = f.section || "";
-
-    const matchFilter =
-      filter === "Tất cả" ||
-      type === filter ||
-      genre === filter;
-
-    return matchFilter && title.includes(q);
-  });
-
-  document.getElementById("count").textContent =
-    data.length + " tác phẩm";
-
-  grid.innerHTML = "";
-
-  if (data.length === 0) {
-    const msg = document.createElement("div");
-    msg.className = "message";
-    msg.textContent = films.length
-      ? "Không tìm thấy phim phù hợp."
-      : "Thư viện hiện chưa có phim.";
-    grid.appendChild(msg);
-    return;
-  }
-
-  data.forEach(f => {
-    const card = document.createElement("article");
-    card.className = "card";
-
-    const poster = document.createElement("div");
-    poster.className = "poster";
-
-    const titleOnPoster = document.createElement("strong");
-    titleOnPoster.textContent = f.Title || "Chưa có tên phim";
-    poster.appendChild(titleOnPoster);
-
-    if (f.poster_url) {
-      try {
-        const posterUrl = new URL(f.poster_url);
-        if (posterUrl.protocol === "https:" || posterUrl.protocol === "http:") {
-          poster.style.backgroundImage =
-            `linear-gradient(0deg,#0009,transparent 65%),url("${posterUrl.href}")`;
-        }
-      } catch (e) {}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const data=films.filter(f=>{
+  const title=(f.Title||"").toLowerCase();
+  const type=f.film_type||"";
+  const genre=f.section||"";
+  return (filter==="Tất cả"||type===filter||genre===filter)&&title.includes(q);
+ });
+ document.getElementById("count").textContent=data.length+" tác phẩm";
+ grid.innerHTML="";
+ if(!data.length){
+  const msg=document.createElement("div");
+  msg.className="message";
+  msg.textContent=films.length?"Không tìm thấy phim phù hợp.":"Thư viện hiện chưa có phim.";
+  grid.appendChild(msg);return;
+ }
+ data.forEach(f=>{
+  const card=document.createElement("article");card.className="card";
+  const poster=document.createElement("div");poster.className="poster";
+  const posterTitle=document.createElement("strong");
+  posterTitle.textContent=f.Title||"Chưa có tên phim";poster.appendChild(posterTitle);
+  if(f.poster_url){
+   try{
+    const u=new URL(f.poster_url);
+    if(u.protocol==="https:"||u.protocol==="http:"){
+     poster.style.backgroundImage=`linear-gradient(0deg,#0009,transparent 65%),url("${u.href}")`;
     }
+   }catch(e){}
+  }
+  const info=document.createElement("div");info.className="card-info";
+  const title=document.createElement("h3");title.textContent=f.Title||"Chưa có tên phim";
+  const meta=document.createElement("div");meta.className="meta";
+  meta.textContent=(f.section||"Chưa phân loại")+" · "+(f.film_type||"Chưa xác định");
+  const tag=document.createElement("span");tag.className="tag";tag.textContent=f.film_type||"Phim";
+  info.append(title,meta,tag);card.append(poster,info);
+  card.addEventListener("click",()=>openFilm(f));grid.appendChild(card);
+ });
+}
 
-    const info = document.createElement("div");
-    info.className = "card-info";
+async function loadFilms(){
+ grid.innerHTML='<div class="message">Đang tải danh sách phim...</div>';
+ const {data,error}=await supabaseClient.from("Films")
+  .select('id, "Title", created_at, poster_url, description, section, film_type, status')
+  .order("created_at",{ascending:false});
+ if(error){
+  console.error(error);
+  grid.innerHTML='<div class="message">Không tải được danh sách phim. Vui lòng kiểm tra kết nối Supabase.</div>';
+  document.getElementById("count").textContent="Lỗi tải dữ liệu";return;
+ }
+ films=data||[];render();
+}
 
-    const title = document.createElement("h3");
-    title.textContent = f.Title || "Chưa có tên phim";
+function openFilm(f){
+ document.getElementById("modalTitle").textContent=f.Title||"";
+ document.getElementById("modalMeta").textContent=(f.section||"")+" · "+(f.film_type||"");
+ document.getElementById("modalDesc").textContent=f.description||"Chưa có mô tả.";
+ document.getElementById("modal").classList.add("show");
+}
 
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent =
-      (f.section || "Chưa phân loại") +
-      " · " +
-      (f.film_type || "Chưa xác định");
+/* GỌI API QUẢN TRỊ - KHÔNG ĐƯA BOT TOKEN HAY DB SECRET RA TRÌNH DUYỆT */
+async function adminRequest(action,extra={}){
+ if(!tg||!tg.initData)throw new Error("Hãy mở Mini App từ Telegram.");
+ const response=await fetch(SUPABASE_URL+"/functions/v1/admin-api",{
+  method:"POST",
+  headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
+  body:JSON.stringify({initData:tg.initData,action,...extra})
+ });
+ const result=await response.json();
+ if(!response.ok||!result.success)throw new Error(result.message||"Không thể thực hiện yêu cầu.");
+ return result.data;
+}
 
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = f.film_type || "Phim";
+function setAdminStatus(message){
+ document.getElementById("adminStatus").textContent=message;
+}
 
-    info.appendChild(title);
-    info.appendChild(meta);
-    info.appendChild(tag);
+async function openAdmin(){
+ const btn=document.getElementById("accountBtn");
+ if(!tg||!tg.initData){
+  alert("Bạn hãy mở Quân Nhã Uyển từ nút Mini App trong Telegram.");return;
+ }
+ btn.disabled=true;btn.textContent="Đang kiểm tra...";
+ try{
+  await adminRequest("list_payments");
+  isAdmin=true;
+  document.getElementById("adminPanel").style.display="block";
+  setAdminStatus("Đã xác thực quản trị thành công.");
+  await Promise.all([loadPayments(),loadMembers()]);
+  document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
+ }catch(error){
+  alert("Không mở được quản trị: "+error.message);
+ }finally{
+  btn.disabled=false;btn.textContent="Tài khoản";
+ }
+}
 
-    card.appendChild(poster);
-    card.appendChild(info);
-
-    card.addEventListener("click", () => openFilm(f));
-    grid.appendChild(card);
+async function loadPayments(){
+ const box=document.getElementById("paymentsList");
+ box.textContent="Đang tải giao dịch...";
+ try{
+  const rows=await adminRequest("list_payments");
+  box.innerHTML="";
+  if(!rows||!rows.length){box.textContent="Hiện chưa có giao dịch chờ duyệt.";return;}
+  rows.forEach(p=>{
+   const item=document.createElement("div");item.className="admin-item";
+   const date=p.created_at?new Date(p.created_at).toLocaleString("vi-VN"):"";
+   const info=document.createElement("p");
+   info.textContent="Mã giao dịch: "+p.id+" · Telegram ID: "+p.telegram_id;
+   const detail=document.createElement("p");
+   detail.textContent="Số tiền: "+Number(p.amount).toLocaleString("vi-VN")+"đ · "+p.duration_days+" ngày";
+   const time=document.createElement("p");time.textContent="Ngày tạo: "+date;
+   const approve=document.createElement("button");approve.className="action-btn";approve.textContent="Duyệt";
+   approve.onclick=()=>handlePayment(p.id,"approve_payment");
+   const reject=document.createElement("button");reject.className="action-btn danger";reject.textContent="Từ chối";
+   reject.onclick=()=>handlePayment(p.id,"reject_payment");
+   item.append(info,detail,time,approve,reject);box.appendChild(item);
   });
+ }catch(error){box.textContent="Lỗi: "+error.message;}
 }
 
-/* TẢI DANH SÁCH PHIM */
-async function loadFilms() {
-  grid.innerHTML =
-    '<div class="message">Đang tải danh sách phim...</div>';
-
-  const { data, error } = await supabaseClient
-    .from("Films")
-    .select('id, "Title", created_at, poster_url, description, section, film_type, status')
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Supabase error:", error);
-    grid.innerHTML =
-      '<div class="message">Không tải được danh sách phim. Vui lòng kiểm tra kết nối Supabase.</div>';
-    document.getElementById("count").textContent = "Lỗi tải dữ liệu";
-    return;
-  }
-
-  films = data || [];
-  render();
+async function handlePayment(id,action){
+ const question=action==="approve_payment"?"Bạn chắc chắn muốn duyệt giao dịch này?":"Bạn chắc chắn muốn từ chối giao dịch này?";
+ if(!confirm(question))return;
+ try{
+  await adminRequest(action,{payment_id:id});
+  alert(action==="approve_payment"?"Đã duyệt thanh toán.":"Đã từ chối thanh toán.");
+  await Promise.all([loadPayments(),loadMembers()]);
+ }catch(error){alert("Không thực hiện được: "+error.message);}
 }
 
-/* CHI TIẾT PHIM */
-function openFilm(f) {
-  document.getElementById("modalTitle").textContent = f.Title || "";
-  document.getElementById("modalMeta").textContent =
-    (f.section || "") + " · " + (f.film_type || "");
-  document.getElementById("modalDesc").textContent =
-    f.description || "Chưa có mô tả.";
-  document.getElementById("modal").classList.add("show");
-}
-
-/* XÁC THỰC QUẢN TRỊ TELEGRAM */
-async function checkTelegramAdmin() {
-  if (!tg || !tg.initData) {
-    alert("Bạn hãy mở Quân Nhã Uyển từ nút Mini App trong Telegram.");
-    return;
-  }
-
-  const accountBtn = document.getElementById("accountBtn");
-  accountBtn.disabled = true;
-  accountBtn.textContent = "Đang kiểm tra...";
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/functions/v1/telegram-admin",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY
-        },
-        body: JSON.stringify({
-          initData: tg.initData
-        })
-      }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Không gọi được chức năng xác thực.");
-    }
-
-    if (result.success === true) {
-      alert("Xác thực quản trị thành công!");
-    } else {
-      alert(result.message || "Tài khoản Telegram này chưa được cấp quyền quản trị.");
-    }
-
-  } catch (error) {
-    console.error("Telegram admin error:", error);
-    alert("Chưa xác thực được quản trị: " + error.message);
-  } finally {
-    accountBtn.disabled = false;
-    accountBtn.textContent = "Tài khoản";
-  }
-}
-
-/* CÁC NÚT VÀ BỘ LỌC */
-document.getElementById("search").addEventListener("input", render);
-
-document.querySelectorAll(".chip").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach(x =>
-      x.classList.remove("active")
-    );
-
-    button.classList.add("active");
-    filter = button.dataset.filter;
-    render();
+async function loadMembers(){
+ const box=document.getElementById("membersList");
+ box.textContent="Đang tải danh sách hội viên...";
+ try{
+  const rows=await adminRequest("list_members");
+  box.innerHTML="";
+  if(!rows||!rows.length){box.textContent="Chưa có hội viên.";return;}
+  rows.forEach(m=>{
+   const item=document.createElement("div");item.className="admin-item";
+   const name=document.createElement("p");
+   name.textContent="Telegram ID: "+m.telegram_id+(m.username?" · @"+m.username:"");
+   const expiry=document.createElement("p");
+   expiry.textContent="Hạn thành viên: "+(m.expiry_date?new Date(m.expiry_date).toLocaleString("vi-VN"):"Chưa có");
+   const status=document.createElement("p");
+   const expired=m.expiry_date&&new Date(m.expiry_date)<=new Date();
+   status.textContent="Trạng thái: "+(expired?"end":m.status||"Chưa xác định");
+   const history=document.createElement("button");history.className="action-btn";history.textContent="Xem lịch sử bù ngày";
+   history.onclick=()=>{
+    document.getElementById("compTelegram").value=m.telegram_id;
+    switchTab("compensateSection");
+    loadHistory(m.telegram_id);
+   };
+   item.append(name,expiry,status,history);box.appendChild(item);
   });
+ }catch(error){box.textContent="Lỗi: "+error.message;}
+}
+
+async function compensateMember(){
+ const telegramId=Number(document.getElementById("compTelegram").value);
+ const days=Number(document.getElementById("compDays").value);
+ const reason=document.getElementById("compReason").value.trim();
+ if(!Number.isSafeInteger(telegramId)||telegramId<=0){alert("Vui lòng nhập Telegram ID hợp lệ.");return;}
+ if(!Number.isSafeInteger(days)||days<=0||days>3650){alert("Số ngày bù phải từ 1 đến 3650.");return;}
+ if(!confirm("Xác nhận bù "+days+" ngày cho Telegram ID "+telegramId+"?"))return;
+ const btn=document.getElementById("compensateBtn");btn.disabled=true;
+ try{
+  const result=await adminRequest("compensate_member",{telegram_id:telegramId,days,reason});
+  alert("Bù ngày thành công. Hạn mới: "+(result.new_expiry_date?new Date(result.new_expiry_date).toLocaleString("vi-VN"):"đã cập nhật"));
+  document.getElementById("compDays").value="";
+  document.getElementById("compReason").value="";
+  await loadMembers();
+  await loadHistory(telegramId);
+ }catch(error){alert("Không bù được ngày: "+error.message);}
+ finally{btn.disabled=false;}
+}
+
+async function loadHistory(telegramId){
+ const id=Number(telegramId||document.getElementById("compTelegram").value);
+ const box=document.getElementById("historyList");
+ if(!Number.isSafeInteger(id)||id<=0){box.textContent="Nhập Telegram ID để xem lịch sử.";return;}
+ box.textContent="Đang tải lịch sử...";
+ try{
+  const rows=await adminRequest("member_history",{telegram_id:id});
+  box.innerHTML="";
+  if(!rows||!rows.length){box.textContent="Hội viên này chưa có lịch sử bù ngày.";return;}
+  rows.forEach(h=>{
+   const item=document.createElement("div");item.className="admin-item";
+   const p1=document.createElement("p");p1.textContent="Đã bù: "+h.days_added+" ngày";
+   const p2=document.createElement("p");p2.textContent="Thời gian: "+new Date(h.created_at).toLocaleString("vi-VN");
+   const p3=document.createElement("p");p3.textContent="Lý do: "+(h.reason||"Không ghi lý do");
+   const p4=document.createElement("p");p4.textContent="Hạn mới: "+new Date(h.new_expiry_date).toLocaleString("vi-VN");
+   item.append(p1,p2,p3,p4);box.appendChild(item);
+  });
+ }catch(error){box.textContent="Lỗi: "+error.message;}
+}
+
+function switchTab(id){
+ document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".admin-tabs button").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ const button=document.querySelector(`.admin-tabs button[data-tab="${id}"]`);
+ if(button)button.classList.add("active");
+}
+
+document.getElementById("search").addEventListener("input",render);
+document.querySelectorAll(".chip").forEach(button=>{
+ button.addEventListener("click",()=>{
+  document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
+  button.classList.add("active");filter=button.dataset.filter;render();
+ });
+});
+document.getElementById("close").onclick=()=>document.getElementById("modal").classList.remove("show");
+document.getElementById("modal").onclick=e=>{
+ if(e.target.id==="modal")e.currentTarget.classList.remove("show");
+};
+document.getElementById("accountBtn").onclick=openAdmin;
+document.getElementById("refreshPayments").onclick=loadPayments;
+document.getElementById("refreshMembers").onclick=loadMembers;
+document.getElementById("compensateBtn").onclick=compensateMember;
+document.getElementById("historyBtn").onclick=()=>loadHistory();
+document.querySelectorAll(".admin-tabs button").forEach(button=>{
+ button.onclick=()=>switchTab(button.dataset.tab);
 });
 
-document.getElementById("close").onclick = () => {
-  document.getElementById("modal").classList.remove("show");
-};
-
-document.getElementById("modal").onclick = e => {
-  if (e.target.id === "modal") {
-    e.currentTarget.classList.remove("show");
-  }
-};
-
-document.getElementById("accountBtn").onclick = checkTelegramAdmin;
-
-/* KHỞI ĐỘNG WEBSITE */
 loadFilms();
 </script>
 </body>
