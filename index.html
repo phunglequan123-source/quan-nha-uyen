@@ -73,8 +73,19 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .episode-choice{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#242630;border:1px solid #ffffff18;border-radius:9px;padding:11px;margin:8px 0}
 .episode-choice span{font-size:13px}
 #episodeChoices{margin-top:15px}
+.package-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0}
+.package-card{background:#242630;border:1px solid #665b4a;border-radius:12px;padding:16px;text-align:center}
+.package-card h3{margin:0 0 6px;color:var(--gold);font:20px Georgia,serif}
+.package-card strong{display:block;font-size:20px;color:var(--pink);margin:7px 0}
+.package-card p{font-size:12px;margin:5px 0 12px}
+.package-card button{width:100%}
+.qr-box{text-align:center;margin-top:16px}
+.qr-box img{display:block;width:min(100%,300px);margin:12px auto;border-radius:12px;background:white;padding:8px}
+.payment-info{background:#242630;border:1px solid #ffffff18;border-radius:12px;padding:14px;margin-top:12px;overflow-wrap:anywhere}
+.payment-info p{margin:6px 0;font-size:14px}
+.copy-btn{margin-left:6px;padding:4px 8px;border-radius:6px;border:1px solid #765466;background:#302832;color:white;cursor:pointer}
 @media(max-width:850px){.grid{grid-template-columns:repeat(3,1fr)}nav{display:none}.search{margin-left:auto}}
-@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}#adminPanel{padding:13px}.episode-choice{align-items:flex-start;flex-direction:column}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}#adminPanel{padding:13px}.episode-choice{align-items:flex-start;flex-direction:column}.package-grid{grid-template-columns:1fr 1fr}.package-card{padding:11px}.package-card h3{font-size:17px}.package-card strong{font-size:17px}}
 </style>
 </head>
 <body>
@@ -169,6 +180,65 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <footer>QUÂN NHÃ UYỂN · Thư viện phim Vietsub<br>Nội dung hiển thị từ thư viện phim.</footer>
 
+<!-- Cửa sổ đăng ký hội viên -->
+<div class="modal" id="membershipModal">
+<div class="dialog">
+<button class="close" id="membershipClose">×</button>
+<div class="eyebrow">QUÂN NHÃ UYỂN</div>
+<h2>Đăng ký hội viên</h2>
+<p>Chọn gói thành viên phù hợp để mở quyền xem phim.</p>
+
+<div class="package-grid">
+<div class="package-card">
+<h3>30 ngày</h3>
+<strong>50.000đ</strong>
+<p>Gói 1 tháng</p>
+<button class="action-btn choosePackage" data-days="30">Chọn gói</button>
+</div>
+<div class="package-card">
+<h3>60 ngày</h3>
+<strong>90.000đ</strong>
+<p>Gói 2 tháng</p>
+<button class="action-btn choosePackage" data-days="60">Chọn gói</button>
+</div>
+<div class="package-card">
+<h3>180 ngày</h3>
+<strong>260.000đ</strong>
+<p>Gói 6 tháng</p>
+<button class="action-btn choosePackage" data-days="180">Chọn gói</button>
+</div>
+<div class="package-card">
+<h3>365 ngày</h3>
+<strong>500.000đ</strong>
+<p>Gói 1 năm · Tiết kiệm</p>
+<button class="action-btn choosePackage" data-days="365">Chọn gói</button>
+</div>
+</div>
+
+<div id="paymentArea" style="display:none">
+<div class="notice" id="paymentStatus">Đang tạo giao dịch...</div>
+<div class="qr-box">
+<img id="paymentQr" alt="Mã QR thanh toán Vietcombank">
+</div>
+<div class="payment-info">
+<p><strong>Ngân hàng:</strong> Vietcombank</p>
+<p><strong>Chủ tài khoản:</strong> PHUNG LE QUAN</p>
+<p><strong>Số tài khoản:</strong> 0181003571753</p>
+<p><strong>Số tiền:</strong> <strong id="paymentAmount" style="color:var(--pink)"></strong></p>
+<p><strong>Nội dung chuyển khoản:</strong></p>
+<p style="color:var(--gold);font-size:18px;font-weight:bold" id="paymentCode"></p>
+<button class="copy-btn" id="copyPaymentCode">Sao chép mã</button>
+</div>
+<p class="small-note">Vui lòng chuyển khoản đúng số tiền và nội dung. Sau khi chuyển khoản, quản trị viên sẽ kiểm tra và xác nhận thủ công. Hội viên chỉ được kích hoạt sau khi giao dịch được duyệt.</p>
+<button class="btn" id="paidBtn" type="button" style="margin-top:12px;width:100%">Tôi đã chuyển khoản</button>
+<div class="admin-status" id="paidMessage"></div>
+</div>
+
+<div class="notice">Nếu bạn đã chuyển khoản, vui lòng chờ quản trị viên xác nhận. Không chuyển khoản nhiều lần cho cùng một giao dịch.</div>
+<button class="action-btn" id="openAdminBtn" type="button" style="margin-top:14px;width:100%">Mở trang quản trị</button>
+</div>
+</div>
+
 <!-- Cửa sổ thông tin và phát phim -->
 <div class="modal" id="modal">
 <div class="dialog">
@@ -177,23 +247,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <h2 id="modalTitle"></h2>
 <div class="meta" id="modalMeta"></div>
 <p id="modalDesc"></p>
-
-<div class="notice" id="watchNotice">
-Đang kiểm tra quyền xem phim...
-</div>
-
-<button class="btn" id="watchBtn" type="button" style="display:none;margin-top:15px">
-▶ Xem phim
-</button>
-
+<div class="notice" id="watchNotice">Đang kiểm tra quyền xem phim...</div>
+<button class="btn" id="watchBtn" type="button" style="display:none;margin-top:15px">▶ Xem phim</button>
 <div id="episodeChoices" style="display:none">
 <strong style="color:var(--gold)">Danh sách tập phim</strong>
 <div id="episodeChoicesList"></div>
 </div>
-
 <div id="playerArea" style="display:none">
-<video id="videoPlayer" controls playsinline preload="metadata"
-style="width:100%;margin-top:15px;border-radius:10px;background:#000"></video>
+<video id="videoPlayer" controls playsinline preload="metadata" style="width:100%;margin-top:15px;border-radius:10px;background:#000"></video>
 </div>
 </div>
 </div>
@@ -268,6 +329,7 @@ let filter="Tất cả";
 let isAdmin=false;
 let currentEpisodeFilm=null;
 let currentViewingFilm=null;
+let currentPayment=null;
 const grid=document.getElementById("grid");
 
 function el(tag,cls,text){
@@ -331,6 +393,76 @@ async function loadFilms(){
  render();
 }
 
+/* API thanh toán và đăng ký hội viên */
+async function createPayment(durationDays){
+ if(!tg||!tg.initData){
+  alert("Bạn hãy mở Quân Nhã Uyển từ Telegram để đăng ký hội viên.");
+  return;
+ }
+ const buttons=document.querySelectorAll(".choosePackage");
+ buttons.forEach(b=>b.disabled=true);
+ document.getElementById("paymentArea").style.display="block";
+ document.getElementById("paymentStatus").textContent="Đang tạo giao dịch...";
+ document.getElementById("paymentQr").style.display="none";
+ document.getElementById("paidMessage").textContent="";
+ try{
+  const response=await fetch(SUPABASE_URL+"/functions/v1/payment-api",{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json",
+    "apikey":SUPABASE_KEY
+   },
+   body:JSON.stringify({
+    action:"create_payment",
+    initData:tg.initData,
+    duration_days:durationDays
+   })
+  });
+  let result;
+  try{result=await response.json();}
+  catch(e){throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");}
+  if(!response.ok||!result.success){
+   throw new Error(result.error||"Không tạo được giao dịch.");
+  }
+  currentPayment=result.payment;
+  document.getElementById("paymentAmount").textContent=Number(result.payment.amount).toLocaleString("vi-VN")+"đ";
+  document.getElementById("paymentCode").textContent=result.payment.payment_code;
+  const qr=document.getElementById("paymentQr");
+  qr.src=result.qr_url;
+  qr.style.display="block";
+  qr.onerror=()=>{qr.style.display="none";document.getElementById("paymentStatus").textContent="Không tải được mã QR. Bạn có thể dùng thông tin chuyển khoản bên dưới.";};
+  document.getElementById("paymentStatus").textContent="Đã tạo giao dịch. Vui lòng chuyển khoản đúng số tiền và nội dung.";
+  document.getElementById("paidBtn").disabled=false;
+  document.getElementById("paidBtn").textContent="Tôi đã chuyển khoản";
+ }catch(error){
+  document.getElementById("paymentStatus").textContent="Lỗi: "+error.message;
+ }finally{
+  buttons.forEach(b=>b.disabled=false);
+ }
+}
+
+function openMembership(){
+ document.getElementById("membershipModal").classList.add("show");
+ document.getElementById("paymentArea").style.display="none";
+ document.getElementById("paidMessage").textContent="";
+ currentPayment=null;
+}
+
+function closeMembership(){
+ document.getElementById("membershipModal").classList.remove("show");
+}
+
+async function copyPaymentCode(){
+ const code=document.getElementById("paymentCode").textContent;
+ if(!code)return;
+ try{
+  await navigator.clipboard.writeText(code);
+  alert("Đã sao chép mã chuyển khoản.");
+ }catch(e){
+  alert("Bạn hãy bôi đen và sao chép mã: "+code);
+ }
+}
+
 /* API xem phim: xác thực hội viên tại máy chủ */
 async function watchRequest(action,extra={}){
  if(!tg||!tg.initData){
@@ -345,11 +477,8 @@ async function watchRequest(action,extra={}){
   body:JSON.stringify({initData:tg.initData,action,...extra})
  });
  let result;
- try{
-  result=await response.json();
- }catch(e){
-  throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");
- }
+ try{result=await response.json();}
+ catch(e){throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");}
  if(!response.ok||!result.success){
   throw new Error(result.message||"Không thể tải nội dung phim.");
  }
@@ -373,27 +502,17 @@ function closeFilmModal(){
 }
 
 async function playVideoUrl(url){
- if(typeof url!=="string"||!url.trim()){
-  throw new Error("Không tìm thấy đường dẫn video.");
- }
+ if(typeof url!=="string"||!url.trim())throw new Error("Không tìm thấy đường dẫn video.");
  let parsed;
- try{parsed=new URL(url);}catch(e){
-  throw new Error("Đường dẫn video không hợp lệ.");
- }
- if(parsed.protocol!=="https:"&&parsed.protocol!=="http:"){
-  throw new Error("Đường dẫn video không hợp lệ.");
- }
+ try{parsed=new URL(url);}catch(e){throw new Error("Đường dẫn video không hợp lệ.");}
+ if(parsed.protocol!=="https:"&&parsed.protocol!=="http:")throw new Error("Đường dẫn video không hợp lệ.");
  const player=document.getElementById("videoPlayer");
  player.pause();
  player.src=parsed.href;
  document.getElementById("playerArea").style.display="block";
  player.load();
  player.scrollIntoView({behavior:"smooth",block:"center"});
- try{
-  await player.play();
- }catch(e){
-  // Một số trình duyệt yêu cầu người xem tự bấm nút phát.
- }
+ try{await player.play();}catch(e){}
 }
 
 async function playFilm(){
@@ -409,9 +528,7 @@ async function playFilm(){
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
- }finally{
-  btn.disabled=false;
- }
+ }finally{btn.disabled=false;}
 }
 
 async function loadMemberEpisodes(film){
@@ -455,9 +572,7 @@ async function playEpisode(ep,button){
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
- }finally{
-  button.disabled=false;
- }
+ }finally{button.disabled=false;}
 }
 
 function openFilm(f){
@@ -472,12 +587,10 @@ function openFilm(f){
  const watchBtn=document.getElementById("watchBtn");
  watchBtn.style.display="none";
  document.getElementById("modal").classList.add("show");
-
  if(!tg||!tg.initData){
   document.getElementById("watchNotice").textContent="Bạn hãy mở Quân Nhã Uyển từ Telegram để kiểm tra hội viên và xem phim.";
   return;
  }
-
  if(f.film_type==="Phim lẻ"){
   watchBtn.textContent="▶ Xem phim";
   watchBtn.style.display="inline-block";
@@ -508,14 +621,11 @@ function setAdminStatus(message){
 }
 
 async function openAdmin(){
- const btn=document.getElementById("accountBtn");
- if(!tg||!tg.initData){
-  alert("Bạn hãy mở Quân Nhã Uyển từ nút Mini App trong Telegram.");
-  return;
- }
+ closeMembership();
+ const btn=document.getElementById("openAdminBtn");
  btn.disabled=true;
- btn.textContent="Đang kiểm tra...";
  try{
+  if(!tg||!tg.initData)throw new Error("Bạn hãy mở Quân Nhã Uyển từ Telegram.");
   await adminRequest("list_payments");
   isAdmin=true;
   document.getElementById("adminPanel").style.display="block";
@@ -524,10 +634,7 @@ async function openAdmin(){
   document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
  }catch(error){
   alert("Không mở được quản trị: "+error.message);
- }finally{
-  btn.disabled=false;
-  btn.textContent="Tài khoản";
- }
+ }finally{btn.disabled=false;}
 }
 
 async function loadPayments(){
@@ -540,6 +647,7 @@ async function loadPayments(){
   rows.forEach(p=>{
    const item=el("div","admin-item");
    item.append(el("p","","Mã giao dịch: "+p.id+" · Telegram ID: "+p.telegram_id));
+   item.append(el("p","","Mã chuyển khoản: "+(p.payment_code||"Không có")));
    item.append(el("p","","Số tiền: "+Number(p.amount).toLocaleString("vi-VN")+"đ · "+p.duration_days+" ngày"));
    item.append(el("p","","Ngày tạo: "+(p.created_at?new Date(p.created_at).toLocaleString("vi-VN"):"")));
    const approve=el("button","action-btn","Duyệt");
@@ -629,9 +737,7 @@ async function loadHistory(telegramId){
 
 /* QUẢN LÝ PHIM */
 async function loadAdminFilms(){
- for(const id of ["seriesList","singleList"]){
-  document.getElementById(id).textContent="Đang tải danh sách phim...";
- }
+ for(const id of ["seriesList","singleList"])document.getElementById(id).textContent="Đang tải danh sách phim...";
  try{
   const rows=await adminRequest("list_films");
   films=rows||[];
@@ -697,9 +803,7 @@ function openFilmEditor(f,type){
  document.getElementById("filmEditor").classList.add("show");
 }
 
-function closeFilmEditor(){
- document.getElementById("filmEditor").classList.remove("show");
-}
+function closeFilmEditor(){document.getElementById("filmEditor").classList.remove("show");}
 
 async function uploadPoster(file){
  if(!file)return null;
@@ -715,10 +819,7 @@ async function uploadPoster(file){
   reader.onerror=()=>reject(new Error("Không đọc được ảnh."));
   reader.readAsDataURL(file);
  });
- const result=await adminRequest("upload_poster",{
-  image_base64:base64,
-  content_type:file.type
- });
+ const result=await adminRequest("upload_poster",{image_base64:base64,content_type:file.type});
  if(!result||!result.poster_url)throw new Error("Máy chủ chưa trả về đường dẫn ảnh.");
  return result.poster_url;
 }
@@ -734,10 +835,7 @@ async function saveFilm(event){
   const type=document.getElementById("editFilmType").value;
   const file=document.getElementById("posterFile").files[0];
   let posterUrl=document.getElementById("oldPosterUrl").value;
-  if(file){
-   status.textContent="Đang tải poster lên...";
-   posterUrl=await uploadPoster(file);
-  }
+  if(file){status.textContent="Đang tải poster lên...";posterUrl=await uploadPoster(file);}
   const payload={
    title:document.getElementById("filmTitle").value.trim(),
    poster_url:posterUrl||"",
@@ -747,19 +845,13 @@ async function saveFilm(event){
    status:document.getElementById("filmStatus").value
   };
   if(type==="Phim lẻ")payload.video_url=document.getElementById("filmVideo").value.trim();
-  if(id){
-   await adminRequest("update_film",{film_id:Number(id),...payload});
-  }else{
-   await adminRequest("create_film",payload);
-  }
+  if(id)await adminRequest("update_film",{film_id:Number(id),...payload});
+  else await adminRequest("create_film",payload);
   status.textContent="Đã lưu phim thành công.";
   await loadAdminFilms();
   setTimeout(closeFilmEditor,500);
- }catch(error){
-  status.textContent="Lỗi: "+error.message;
- }finally{
-  btn.disabled=false;
- }
+ }catch(error){status.textContent="Lỗi: "+error.message;}
+ finally{btn.disabled=false;}
 }
 
 async function deleteFilm(f){
@@ -768,9 +860,7 @@ async function deleteFilm(f){
   await adminRequest("delete_film",{film_id:f.id});
   alert("Đã xóa phim.");
   await loadAdminFilms();
- }catch(error){
-  alert("Không xóa được: "+error.message);
- }
+ }catch(error){alert("Không xóa được: "+error.message);}
 }
 
 /* QUẢN LÝ TẬP PHIM */
@@ -814,10 +904,8 @@ async function loadEpisodes(){
    const del=el("button","action-btn danger","Xóa tập");
    del.onclick=async()=>{
     if(!confirm("Bạn chắc chắn muốn xóa tập "+ep.episode_number+"?"))return;
-    try{
-     await adminRequest("delete_episode",{episode_id:ep.id});
-     await loadEpisodes();
-    }catch(error){alert("Không xóa được: "+error.message);}
+    try{await adminRequest("delete_episode",{episode_id:ep.id});await loadEpisodes();}
+    catch(error){alert("Không xóa được: "+error.message);}
    };
    item.append(edit,del);
    box.appendChild(item);
@@ -837,17 +925,13 @@ async function saveEpisode(event){
    title:document.getElementById("episodeTitle").value.trim(),
    video_url:document.getElementById("episodeVideo").value.trim()
   };
-  if(id){
-   await adminRequest("update_episode",{episode_id:Number(id),...payload});
-  }else{
-   await adminRequest("create_episode",{film_id:currentEpisodeFilm.id,...payload});
-  }
+  if(id)await adminRequest("update_episode",{episode_id:Number(id),...payload});
+  else await adminRequest("create_episode",{film_id:currentEpisodeFilm.id,...payload});
   alert("Đã lưu tập phim.");
   resetEpisodeForm();
   await loadEpisodes();
- }catch(error){
-  alert("Không lưu được tập phim: "+error.message);
- }finally{btn.disabled=false;}
+ }catch(error){alert("Không lưu được tập phim: "+error.message);}
+ finally{btn.disabled=false;}
 }
 
 function switchTab(id){
@@ -869,11 +953,25 @@ document.querySelectorAll(".chip").forEach(button=>{
  });
 });
 
-document.getElementById("close").onclick=closeFilmModal;
-document.getElementById("modal").onclick=e=>{
- if(e.target.id==="modal")closeFilmModal();
+document.getElementById("accountBtn").onclick=openMembership;
+document.getElementById("membershipClose").onclick=closeMembership;
+document.getElementById("membershipModal").onclick=e=>{
+ if(e.target.id==="membershipModal")closeMembership();
 };
-document.getElementById("accountBtn").onclick=openAdmin;
+document.querySelectorAll(".choosePackage").forEach(button=>{
+ button.onclick=()=>createPayment(Number(button.dataset.days));
+});
+document.getElementById("copyPaymentCode").onclick=copyPaymentCode;
+document.getElementById("paidBtn").onclick=()=>{
+ if(!currentPayment)return;
+ document.getElementById("paidMessage").textContent="Cảm ơn bạn. Giao dịch đã được ghi nhận ở trạng thái chờ. Quản trị viên sẽ kiểm tra và xác nhận thủ công.";
+ document.getElementById("paidBtn").disabled=true;
+ document.getElementById("paidBtn").textContent="Đã ghi nhận";
+};
+document.getElementById("openAdminBtn").onclick=openAdmin;
+
+document.getElementById("close").onclick=closeFilmModal;
+document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeFilmModal();};
 document.getElementById("refreshPayments").onclick=loadPayments;
 document.getElementById("refreshMembers").onclick=loadMembers;
 document.getElementById("compensateBtn").onclick=compensateMember;
