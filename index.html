@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="vi">
 <head>
@@ -36,6 +37,9 @@ main{max-width:1150px;margin:auto;padding:24px 20px 60px}
 .poster{height:205px;display:flex;align-items:end;padding:12px;background:linear-gradient(145deg,#57414c,#252b3b 60%,#8c6a5d);background-size:cover;background-position:center;position:relative}
 .poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0009,transparent 65%)}
 .poster strong{z-index:1;font:17px Georgia,serif;text-shadow:0 2px 5px #000}
+.poster-status{position:absolute;top:10px;right:10px;z-index:3;padding:5px 11px;border-radius:5px;font-size:12px;font-weight:700;letter-spacing:1px;line-height:1.4;pointer-events:none}
+.poster-status.full{background:#dc2626;color:#fff}
+.poster-status.update{background:#2563eb;color:#fff}
 .card-info{padding:11px}
 .card-info h3{font-size:14px;margin:0 0 5px}
 .meta{font-size:12px;color:var(--muted)}
@@ -278,11 +282,19 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <label class="admin-label">Đường dẫn video phim lẻ</label>
 <input class="field" id="filmVideo" type="url" placeholder="https://...mp4 hoặc đường dẫn video tương thích">
 </div>
-<label class="admin-label">Trạng thái</label>
+<label class="admin-label">Trạng thái đăng phim</label>
 <select class="field" id="filmStatus">
 <option value="published">Đã đăng</option>
 <option value="draft">Bản nháp</option>
 </select>
+
+<label class="admin-label" for="filmLabel">Nhãn hiển thị trên poster</label>
+<select class="field" id="filmLabel">
+<option value="">Không hiển thị nhãn</option>
+<option value="full">FULL - Phim đã hoàn thành</option>
+<option value="update">UPDATE - Phim đang cập nhật</option>
+</select>
+
 <button class="action-btn" id="saveFilmBtn" type="submit">Lưu phim</button>
 <button class="action-btn" type="button" id="cancelFilmBtn">Hủy</button>
 <div class="admin-status" id="filmFormStatus"></div>
@@ -363,6 +375,17 @@ function render(){
     }
    }catch(e){}
   }
+
+  // NHÃN FULL / UPDATE TRÊN POSTER
+  if(f.completion_status==="full"||f.completion_status==="update"){
+   const badge=el(
+    "span",
+    "poster-status "+f.completion_status,
+    f.completion_status==="full"?"FULL":"UPDATE"
+   );
+   poster.appendChild(badge);
+  }
+
   const info=el("div","card-info");
   info.append(el("h3","",f.Title||"Chưa có tên phim"));
   info.append(el("div","meta",(f.section||"Chưa phân loại")+" · "+(f.film_type||"Chưa xác định")));
@@ -376,7 +399,7 @@ function render(){
 async function loadFilms(){
  grid.innerHTML='<div class="message">Đang tải danh sách phim...</div>';
  const {data,error}=await supabaseClient.from("Films")
-  .select('id, "Title", created_at, poster_url, description, section, film_type, status')
+  .select('id, "Title", created_at, poster_url, description, section, film_type, status, completion_status')
   .eq("status","published")
   .order("created_at",{ascending:false});
  if(error){
@@ -762,6 +785,7 @@ function renderAdminFilmList(type,containerId){
   }
   item.append(el("p","","#"+f.id+" · "+(f.Title||"Chưa có tên")));
   item.append(el("p","","Phân loại: "+(f.section||"Chưa phân loại")+" · "+(f.status==="published"?"Đã đăng":"Bản nháp")));
+  item.append(el("p","","Nhãn poster: "+(f.completion_status==="full"?"FULL":f.completion_status==="update"?"UPDATE":"Không có")));
   const edit=el("button","action-btn","Sửa thông tin");
   edit.onclick=()=>openFilmEditor(f,type);
   item.appendChild(edit);
@@ -787,6 +811,10 @@ function openFilmEditor(f,type){
  document.getElementById("filmSection").value=editing?(f.section||""):"";
  document.getElementById("filmDescription").value=editing?(f.description||""):"";
  document.getElementById("filmStatus").value=editing?(f.status||"published"):"published";
+
+ // NẠP NHÃN FULL / UPDATE KHI SỬA PHIM
+ document.getElementById("filmLabel").value=editing?(f.completion_status||""):"";
+
  document.getElementById("filmVideo").value=editing?(f.video_url||""):"";
  document.getElementById("oldPosterUrl").value=editing?(f.poster_url||""):"";
  document.getElementById("posterPreview").style.display="none";
@@ -838,7 +866,10 @@ async function saveFilm(event){
    description:document.getElementById("filmDescription").value,
    section:document.getElementById("filmSection").value.trim(),
    film_type:type,
-   status:document.getElementById("filmStatus").value
+   status:document.getElementById("filmStatus").value,
+
+   // LƯU NHÃN FULL / UPDATE
+   completion_status:document.getElementById("filmLabel").value
   };
   if(type==="Phim lẻ")payload.video_url=document.getElementById("filmVideo").value.trim();
   if(id)await adminRequest("update_film",{film_id:Number(id),...payload});
