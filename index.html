@@ -45,6 +45,21 @@ main{max-width:1150px;margin:auto;padding:24px 20px 60px}
 .meta{font-size:12px;color:var(--muted)}
 .tag{display:inline-block;margin-top:8px;font-size:10px;color:var(--gold);border:1px solid #75664c;border-radius:10px;padding:2px 7px}
 .message{text-align:center;padding:35px 15px;color:var(--muted);grid-column:1/-1}
+
+/* DANH SÁCH PHIM TỔNG */
+.film-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.film-list-item{display:flex;align-items:center;gap:13px;padding:10px;background:var(--panel);border:1px solid #ffffff12;border-radius:12px;cursor:pointer;transition:.18s}
+.film-list-item:hover{border-color:var(--pink);background:#22242e}
+.film-list-poster{width:66px;height:88px;flex-shrink:0;object-fit:cover;border-radius:7px;background:linear-gradient(145deg,#57414c,#252b3b)}
+.film-list-info{flex:1;min-width:0}
+.film-list-title{font-size:14px;font-weight:bold;margin-bottom:5px;overflow-wrap:anywhere}
+.film-list-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:bold;margin-bottom:5px}
+.film-list-badge.full{background:#dc2626;color:white}
+.film-list-badge.update{background:#2563eb;color:white}
+.film-list-meta{color:var(--muted);font-size:12px}
+.film-list-parts{color:#d8bd8a;font-size:12px;margin-top:5px;line-height:1.7}
+.film-list-empty{text-align:center;padding:25px;color:var(--muted);background:var(--panel);border-radius:10px}
+
 footer{border-top:1px solid #ffffff12;color:var(--muted);text-align:center;padding:24px;font-size:12px}
 .modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal.show{display:flex}
@@ -88,14 +103,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .payment-info p{margin:6px 0;font-size:14px}
 .copy-btn{margin-left:6px;padding:4px 8px;border-radius:6px;border:1px solid #765466;background:#302832;color:white;cursor:pointer}
 @media(max-width:850px){.grid{grid-template-columns:repeat(3,1fr)}nav{display:none}.search{margin-left:auto}}
-@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}#adminPanel{padding:13px}.episode-choice{align-items:flex-start;flex-direction:column}.package-grid{grid-template-columns:1fr 1fr}.package-card{padding:11px}.package-card h3{font-size:17px}.package-card strong{font-size:17px}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.poster{height:170px}.hero{padding:24px;min-height:230px}.hero h1{font-size:29px}.search{max-width:125px}.brand{font-size:18px}.account{font-size:12px;padding:7px 9px}#adminPanel{padding:13px}.episode-choice{align-items:flex-start;flex-direction:column}.package-grid{grid-template-columns:1fr 1fr}.package-card{padding:11px}.package-card h3{font-size:17px}.package-card strong{font-size:17px}.film-list-poster{width:58px;height:78px}.film-list-item{gap:10px;padding:8px}}
 </style>
 </head>
 <body>
 <header>
 <div class="nav">
 <div class="brand"><b>Q</b> Quân Nhã Uyển</div>
-<nav><a href="#">Trang chủ</a><a href="#new">Cập nhật mới nhất</a><a href="#full">Phim Full</a></nav>
+<nav><a href="#">Trang chủ</a><a href="#new">Cập nhật mới nhất</a><a href="#full">Phim Full</a><a href="#allFilms">Danh sách phim</a></nav>
 <input id="search" class="search" placeholder="Tìm tên phim..." aria-label="Tìm phim">
 <button class="account" id="accountBtn">Tài khoản</button>
 </div>
@@ -119,7 +134,19 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <button class="chip" data-filter="Cổ trang">Cổ trang</button>
 <button class="chip" data-filter="Hiện đại">Hiện đại</button>
 </div>
-<section class="grid" id="grid"><div class="message">Đang tải danh sách phim...</div></section>
+
+<section class="grid" id="grid">
+<div class="message">Đang tải danh sách phim...</div>
+</section>
+
+<div class="section-head" id="allFilms">
+<h2>DANH SÁCH PHIM</h2>
+<span id="listCount">Đang tải...</span>
+</div>
+<section class="film-list" id="filmList">
+<div class="film-list-empty">Đang tải danh sách phim...</div>
+</section>
+
 <div class="section-head" id="full"><h2>Phim Full</h2><span>Quân Nhã Uyển</span></div>
 
 <section id="adminPanel">
@@ -192,36 +219,26 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <div class="package-grid">
 <div class="package-card">
-<h3>30 ngày</h3>
-<strong>50.000đ</strong>
-<p>Gói 1 tháng</p>
+<h3>30 ngày</h3><strong>50.000đ</strong><p>Gói 1 tháng</p>
 <button class="action-btn choosePackage" data-days="30">Chọn gói</button>
 </div>
 <div class="package-card">
-<h3>60 ngày</h3>
-<strong>90.000đ</strong>
-<p>Gói 2 tháng</p>
+<h3>60 ngày</h3><strong>90.000đ</strong><p>Gói 2 tháng</p>
 <button class="action-btn choosePackage" data-days="60">Chọn gói</button>
 </div>
 <div class="package-card">
-<h3>180 ngày</h3>
-<strong>260.000đ</strong>
-<p>Gói 6 tháng</p>
+<h3>180 ngày</h3><strong>260.000đ</strong><p>Gói 6 tháng</p>
 <button class="action-btn choosePackage" data-days="180">Chọn gói</button>
 </div>
 <div class="package-card">
-<h3>365 ngày</h3>
-<strong>500.000đ</strong>
-<p>Gói 1 năm · Tiết kiệm</p>
+<h3>365 ngày</h3><strong>500.000đ</strong><p>Gói 1 năm · Tiết kiệm</p>
 <button class="action-btn choosePackage" data-days="365">Chọn gói</button>
 </div>
 </div>
 
 <div id="paymentArea" style="display:none">
 <div class="notice" id="paymentStatus">Đang tạo giao dịch...</div>
-<div class="qr-box">
-<img id="paymentQr" alt="Mã QR thanh toán Vietcombank">
-</div>
+<div class="qr-box"><img id="paymentQr" alt="Mã QR thanh toán Vietcombank"></div>
 <div class="payment-info">
 <p><strong>Ngân hàng:</strong> Vietcombank</p>
 <p><strong>Chủ tài khoản:</strong> PHUNG LE QUAN</p>
@@ -251,7 +268,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <div class="notice" id="watchNotice">Đang kiểm tra quyền xem phim...</div>
 <button class="btn" id="watchBtn" type="button" style="display:none;margin-top:15px">▶ Xem phim</button>
 <div id="episodeChoices" style="display:none">
-<strong style="color:var(--gold)">Danh sách tập phim</strong>
+<strong style="color:var(--gold)">Danh sách phần phim</strong>
 <div id="episodeChoicesList"></div>
 </div>
 <div id="playerArea" style="display:none">
@@ -287,14 +304,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <option value="published">Đã đăng</option>
 <option value="draft">Bản nháp</option>
 </select>
-
 <label class="admin-label" for="filmLabel">Nhãn hiển thị trên poster</label>
 <select class="field" id="filmLabel">
 <option value="">Không hiển thị nhãn</option>
 <option value="full">FULL - Phim đã hoàn thành</option>
 <option value="update">UPDATE - Phim đang cập nhật</option>
 </select>
-
 <button class="action-btn" id="saveFilmBtn" type="submit">Lưu phim</button>
 <button class="action-btn" type="button" id="cancelFilmBtn">Hủy</button>
 <div class="admin-status" id="filmFormStatus"></div>
@@ -321,7 +336,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <button class="action-btn" type="button" id="resetEpisodeBtn">Nhập tập mới</button>
 </form>
 </div>
-<strong>Danh sách tập phim</strong>
+<strong>Danh sách phần phim</strong>
 <div id="episodesList"></div>
 </div>
 </div>
@@ -348,8 +363,10 @@ function el(tag,cls,text){
  return node;
 }
 
+/* HIỂN THỊ POSTER VÀ DANH SÁCH TỔNG */
 function render(){
  const q=document.getElementById("search").value.toLowerCase();
+
  const data=films.filter(f=>{
   const title=(f.Title||"").toLowerCase();
   const type=f.film_type||"";
@@ -358,57 +375,164 @@ function render(){
    (filter==="Tất cả"||type===filter||genre===filter) &&
    title.includes(q);
  });
+
  document.getElementById("count").textContent=data.length+" tác phẩm";
+ document.getElementById("listCount").textContent=data.length+" phim";
+
+ // POSTER LỚN
  grid.innerHTML="";
+
  if(!data.length){
-  grid.appendChild(el("div","message",films.length?"Không tìm thấy phim phù hợp.":"Thư viện hiện chưa có phim."));
+  grid.appendChild(el("div","message","Không tìm thấy phim phù hợp."));
+ }else{
+  data.forEach(f=>{
+   const card=el("article","card");
+   const poster=el("div","poster");
+
+   if(f.poster_url){
+    try{
+     const u=new URL(f.poster_url);
+     if(u.protocol==="https:"||u.protocol==="http:"){
+      poster.style.backgroundImage=`linear-gradient(0deg,#0009,transparent 65%),url("${u.href}")`;
+     }
+    }catch(e){}
+   }
+
+   if(f.completion_status==="full"||f.completion_status==="update"){
+    poster.appendChild(el(
+     "span",
+     "poster-status "+f.completion_status,
+     f.completion_status==="full"?"FULL":"UPDATE"
+    ));
+   }
+
+   const info=el("div","card-info");
+   info.append(el("h3","",f.Title||"Chưa có tên phim"));
+   info.append(el("div","meta",(f.section||"Chưa phân loại")+" · "+(f.film_type||"Chưa xác định")));
+   info.append(el("span","tag",f.film_type||"Phim"));
+
+   card.append(poster,info);
+   card.addEventListener("click",()=>openFilm(f));
+   grid.appendChild(card);
+  });
+ }
+
+ // DANH SÁCH TỔNG: POSTER NHỎ BÊN TRÁI, THÔNG TIN BÊN PHẢI
+ const list=document.getElementById("filmList");
+ list.innerHTML="";
+
+ if(!data.length){
+  list.appendChild(el("div","film-list-empty","Không tìm thấy phim phù hợp."));
   return;
  }
+
  data.forEach(f=>{
-  const card=el("article","card");
-  const poster=el("div","poster");
+  const item=el("article","film-list-item");
+
+  const poster=el("img","film-list-poster");
+  poster.alt="Poster "+(f.Title||"phim");
+  poster.loading="lazy";
+
   if(f.poster_url){
-   try{
-    const u=new URL(f.poster_url);
-    if(u.protocol==="https:"||u.protocol==="http:"){
-     poster.style.backgroundImage=`linear-gradient(0deg,#0009,transparent 65%),url("${u.href}")`;
-    }
-   }catch(e){}
+   poster.src=f.poster_url;
+   poster.onerror=()=>{poster.style.display="none";};
+  }else{
+   poster.style.display="none";
   }
 
-  // NHÃN FULL / UPDATE TRÊN POSTER
+  const info=el("div","film-list-info");
+  info.appendChild(el("div","film-list-title",f.Title||"Chưa có tên phim"));
+
   if(f.completion_status==="full"||f.completion_status==="update"){
-   const badge=el(
+   info.appendChild(el(
     "span",
-    "poster-status "+f.completion_status,
+    "film-list-badge "+f.completion_status,
     f.completion_status==="full"?"FULL":"UPDATE"
-   );
-   poster.appendChild(badge);
+   ));
   }
 
-  const info=el("div","card-info");
-  info.append(el("h3","",f.Title||"Chưa có tên phim"));
-  info.append(el("div","meta",(f.section||"Chưa phân loại")+" · "+(f.film_type||"Chưa xác định")));
-  info.append(el("span","tag",f.film_type||"Phim"));
-  card.append(poster,info);
-  card.addEventListener("click",()=>openFilm(f));
-  grid.appendChild(card);
+  info.appendChild(el(
+   "div",
+   "film-list-meta",
+   (f.film_type||"Chưa xác định")+" · "+(f.section||"Chưa phân loại")
+  ));
+
+  if(f.film_type==="Phim bộ"){
+   const parts=f.publicParts||[];
+   const partNames=parts.map(ep=>"Phần "+ep.episode_number);
+
+   info.appendChild(el(
+    "div",
+    "film-list-parts",
+    partNames.length?partNames.join(" · "):"Chưa có phần phim"
+   ));
+  }
+
+  item.append(poster,info);
+  item.addEventListener("click",()=>openFilm(f));
+  list.appendChild(item);
  });
+}
+
+async function publicPartsRequest(filmId){
+ const response=await fetch(SUPABASE_URL+"/functions/v1/watch-api",{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json",
+   "apikey":SUPABASE_KEY
+  },
+  body:JSON.stringify({
+   action:"list_public_parts",
+   film_id:filmId
+  })
+ });
+
+ let result;
+ try{result=await response.json();}
+ catch(e){throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");}
+
+ if(!response.ok||!result.success){
+  throw new Error(result.message||"Không tải được danh sách phần.");
+ }
+
+ return result.data||[];
+}
+
+async function loadPublicPartMetadata(){
+ const series=films.filter(f=>
+  f.status==="published"&&f.film_type==="Phim bộ"
+ );
+
+ await Promise.all(series.map(async f=>{
+  try{
+   f.publicParts=await publicPartsRequest(f.id);
+   f.publicParts.sort((a,b)=>a.episode_number-b.episode_number);
+  }catch(error){
+   console.error("Không tải được phần phim:",f.Title,error);
+   f.publicParts=[];
+  }
+ }));
 }
 
 async function loadFilms(){
  grid.innerHTML='<div class="message">Đang tải danh sách phim...</div>';
+
  const {data,error}=await supabaseClient.from("Films")
   .select('id, "Title", created_at, poster_url, description, section, film_type, status, completion_status')
   .eq("status","published")
   .order("created_at",{ascending:false});
+
  if(error){
   console.error(error);
   grid.innerHTML='<div class="message">Không tải được danh sách phim. Vui lòng kiểm tra kết nối Supabase.</div>';
   document.getElementById("count").textContent="Lỗi tải dữ liệu";
+  document.getElementById("listCount").textContent="Lỗi tải dữ liệu";
+  document.getElementById("filmList").innerHTML='<div class="film-list-empty">Không tải được danh sách phim.</div>';
   return;
  }
+
  films=data||[];
+ await loadPublicPartMetadata();
  render();
 }
 
@@ -424,32 +548,32 @@ async function createPayment(durationDays){
  document.getElementById("paymentStatus").textContent="Đang tạo giao dịch...";
  document.getElementById("paymentQr").style.display="none";
  document.getElementById("paidMessage").textContent="";
+
  try{
   const response=await fetch(SUPABASE_URL+"/functions/v1/payment-api",{
    method:"POST",
-   headers:{
-    "Content-Type":"application/json",
-    "apikey":SUPABASE_KEY
-   },
-   body:JSON.stringify({
-    action:"create_payment",
-    initData:tg.initData,
-    duration_days:durationDays
-   })
+   headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
+   body:JSON.stringify({action:"create_payment",initData:tg.initData,duration_days:durationDays})
   });
+
   let result;
   try{result=await response.json();}
   catch(e){throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");}
-  if(!response.ok||!result.success){
-   throw new Error(result.error||"Không tạo được giao dịch.");
-  }
+
+  if(!response.ok||!result.success)throw new Error(result.error||"Không tạo được giao dịch.");
+
   currentPayment=result.payment;
   document.getElementById("paymentAmount").textContent=Number(result.payment.amount).toLocaleString("vi-VN")+"đ";
   document.getElementById("paymentCode").textContent=result.payment.payment_code;
+
   const qr=document.getElementById("paymentQr");
   qr.src=result.qr_url;
   qr.style.display="block";
-  qr.onerror=()=>{qr.style.display="none";document.getElementById("paymentStatus").textContent="Không tải được mã QR. Bạn có thể dùng thông tin chuyển khoản bên dưới.";};
+  qr.onerror=()=>{
+   qr.style.display="none";
+   document.getElementById("paymentStatus").textContent="Không tải được mã QR. Bạn có thể dùng thông tin chuyển khoản bên dưới.";
+  };
+
   document.getElementById("paymentStatus").textContent="Đã tạo giao dịch. Vui lòng chuyển khoản đúng số tiền và nội dung.";
   document.getElementById("paidBtn").disabled=false;
   document.getElementById("paidBtn").textContent="Tôi đã chuyển khoản";
@@ -487,17 +611,17 @@ async function watchRequest(action,extra={}){
  if(!tg||!tg.initData){
   throw new Error("Bạn hãy mở Quân Nhã Uyển từ Telegram để xem phim.");
  }
+
  const response=await fetch(SUPABASE_URL+"/functions/v1/watch-api",{
   method:"POST",
-  headers:{
-   "Content-Type":"application/json",
-   "apikey":SUPABASE_KEY
-  },
+  headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
   body:JSON.stringify({initData:tg.initData,action,...extra})
  });
+
  let result;
  try{result=await response.json();}
  catch(e){throw new Error("Máy chủ trả về dữ liệu không hợp lệ.");}
+
  if(!response.ok||!result.success){
   throw new Error(result.message||"Không thể tải nội dung phim.");
  }
@@ -522,9 +646,15 @@ function closeFilmModal(){
 
 async function playVideoUrl(url){
  if(typeof url!=="string"||!url.trim())throw new Error("Không tìm thấy đường dẫn video.");
+
  let parsed;
- try{parsed=new URL(url);}catch(e){throw new Error("Đường dẫn video không hợp lệ.");}
- if(parsed.protocol!=="https:"&&parsed.protocol!=="http:")throw new Error("Đường dẫn video không hợp lệ.");
+ try{parsed=new URL(url);}
+ catch(e){throw new Error("Đường dẫn video không hợp lệ.");}
+
+ if(parsed.protocol!=="https:"&&parsed.protocol!=="http:"){
+  throw new Error("Đường dẫn video không hợp lệ.");
+ }
+
  const player=document.getElementById("videoPlayer");
  player.pause();
  player.src=parsed.href;
@@ -536,10 +666,12 @@ async function playVideoUrl(url){
 
 async function playFilm(){
  if(!currentViewingFilm)return;
+
  const btn=document.getElementById("watchBtn");
  const notice=document.getElementById("watchNotice");
  btn.disabled=true;
  notice.textContent="Đang kiểm tra hội viên và tải video...";
+
  try{
   const data=await watchRequest("get_film_video",{film_id:currentViewingFilm.id});
   await playVideoUrl(data.video_url);
@@ -547,29 +679,37 @@ async function playFilm(){
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
- }finally{btn.disabled=false;}
+ }finally{
+  btn.disabled=false;
+ }
 }
 
-async function loadMemberEpisodes(film){
+/* DANH SÁCH PHẦN CÔNG KHAI - KHÔNG LẤY ĐƯỜNG DẪN VIDEO */
+async function loadPublicEpisodes(film){
  const notice=document.getElementById("watchNotice");
  const choices=document.getElementById("episodeChoices");
  const list=document.getElementById("episodeChoicesList");
+
  choices.style.display="block";
- list.textContent="Đang tải danh sách tập...";
- notice.textContent="Đang kiểm tra quyền hội viên...";
+ list.textContent="Đang tải danh sách phần...";
+
  try{
-  const episodes=await watchRequest("list_episodes",{film_id:film.id});
+  const episodes=film.publicParts||await publicPartsRequest(film.id);
   list.innerHTML="";
+
   if(!episodes||!episodes.length){
-   list.textContent="Phim này chưa có tập phim.";
-   notice.textContent="Chưa có tập phim để xem.";
+   list.textContent="Phim này chưa có phần phim.";
+   notice.textContent="Chưa có phần phim.";
    return;
   }
-  notice.textContent="Chọn tập phim bạn muốn xem.";
+
+  notice.textContent="Chọn phần phim bạn muốn xem.";
+
   episodes.forEach(ep=>{
    const item=el("div","episode-choice");
-   const name=el("span","", "Tập "+ep.episode_number+(ep.title?" · "+ep.title:""));
-   const button=el("button","action-btn","▶ Xem tập");
+   const name=el("span","", "Phần "+ep.episode_number+(ep.title?" · "+ep.title:""));
+   const button=el("button","action-btn","▶ Xem phần");
+
    button.onclick=()=>playEpisode(ep,button);
    item.append(name,button);
    list.appendChild(item);
@@ -583,53 +723,57 @@ async function loadMemberEpisodes(film){
 async function playEpisode(ep,button){
  const notice=document.getElementById("watchNotice");
  button.disabled=true;
- notice.textContent="Đang kiểm tra hội viên và tải tập phim...";
+ notice.textContent="Đang kiểm tra hội viên và tải phần phim...";
+
  try{
   const data=await watchRequest("get_episode_video",{episode_id:ep.id});
   await playVideoUrl(data.video_url);
-  notice.textContent="Đang phát tập "+ep.episode_number+".";
+  notice.textContent="Đang phát Phần "+ep.episode_number+".";
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
- }finally{button.disabled=false;}
+ }finally{
+  button.disabled=false;
+ }
 }
 
 function openFilm(f){
  currentViewingFilm=f;
  stopVideo();
+
  document.getElementById("modalTitle").textContent=f.Title||"";
  document.getElementById("modalMeta").textContent=(f.section||"")+" · "+(f.film_type||"");
  document.getElementById("modalDesc").textContent=f.description||"Chưa có mô tả.";
  document.getElementById("watchNotice").textContent="Đang kiểm tra quyền hội viên...";
  document.getElementById("episodeChoices").style.display="none";
  document.getElementById("episodeChoicesList").innerHTML="";
+
  const watchBtn=document.getElementById("watchBtn");
  watchBtn.style.display="none";
  document.getElementById("modal").classList.add("show");
- if(!tg||!tg.initData){
-  document.getElementById("watchNotice").textContent="Bạn hãy mở Quân Nhã Uyển từ Telegram để kiểm tra hội viên và xem phim.";
-  return;
- }
+
  if(f.film_type==="Phim lẻ"){
   watchBtn.textContent="▶ Xem phim";
   watchBtn.style.display="inline-block";
   watchBtn.onclick=playFilm;
   document.getElementById("watchNotice").textContent="Bấm Xem phim để kiểm tra hội viên và phát video.";
  }else if(f.film_type==="Phim bộ"){
-  loadMemberEpisodes(f);
+  loadPublicEpisodes(f);
  }else{
   document.getElementById("watchNotice").textContent="Loại phim này chưa được hỗ trợ phát.";
  }
 }
 
-/* API quản trị */
+/* API QUẢN TRỊ */
 async function adminRequest(action,extra={}){
  if(!tg||!tg.initData)throw new Error("Hãy mở Mini App từ Telegram.");
+
  const response=await fetch(SUPABASE_URL+"/functions/v1/admin-api",{
   method:"POST",
   headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
   body:JSON.stringify({initData:tg.initData,action,...extra})
  });
+
  const result=await response.json();
  if(!response.ok||!result.success)throw new Error(result.message||"Không thể thực hiện yêu cầu.");
  return result.data;
@@ -643,6 +787,7 @@ async function openAdmin(){
  closeMembership();
  const btn=document.getElementById("openAdminBtn");
  btn.disabled=true;
+
  try{
   if(!tg||!tg.initData)throw new Error("Bạn hãy mở Quân Nhã Uyển từ Telegram.");
   await adminRequest("list_payments");
@@ -653,76 +798,112 @@ async function openAdmin(){
   document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
  }catch(error){
   alert("Không mở được quản trị: "+error.message);
- }finally{btn.disabled=false;}
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 async function loadPayments(){
  const box=document.getElementById("paymentsList");
  box.textContent="Đang tải giao dịch...";
+
  try{
   const rows=await adminRequest("list_payments");
   box.innerHTML="";
-  if(!rows||!rows.length){box.textContent="Hiện chưa có giao dịch chờ duyệt.";return;}
+
+  if(!rows||!rows.length){
+   box.textContent="Hiện chưa có giao dịch chờ duyệt.";
+   return;
+  }
+
   rows.forEach(p=>{
    const item=el("div","admin-item");
    item.append(el("p","","Mã giao dịch: "+p.id+" · Telegram ID: "+p.telegram_id));
    item.append(el("p","","Mã chuyển khoản: "+(p.payment_code||"Không có")));
    item.append(el("p","","Số tiền: "+Number(p.amount).toLocaleString("vi-VN")+"đ · "+p.duration_days+" ngày"));
    item.append(el("p","","Ngày tạo: "+(p.created_at?new Date(p.created_at).toLocaleString("vi-VN"):"")));
+
    const approve=el("button","action-btn","Duyệt");
    approve.onclick=()=>handlePayment(p.id,"approve_payment");
+
    const reject=el("button","action-btn danger","Từ chối");
    reject.onclick=()=>handlePayment(p.id,"reject_payment");
+
    item.append(approve,reject);
    box.appendChild(item);
   });
- }catch(error){box.textContent="Lỗi: "+error.message;}
+ }catch(error){
+  box.textContent="Lỗi: "+error.message;
+ }
 }
 
 async function handlePayment(id,action){
  const question=action==="approve_payment"?"Bạn chắc chắn muốn duyệt giao dịch này?":"Bạn chắc chắn muốn từ chối giao dịch này?";
  if(!confirm(question))return;
+
  try{
   await adminRequest(action,{payment_id:id});
   alert(action==="approve_payment"?"Đã duyệt thanh toán.":"Đã từ chối thanh toán.");
   await Promise.all([loadPayments(),loadMembers()]);
- }catch(error){alert("Không thực hiện được: "+error.message);}
+ }catch(error){
+  alert("Không thực hiện được: "+error.message);
+ }
 }
 
 async function loadMembers(){
  const box=document.getElementById("membersList");
  box.textContent="Đang tải danh sách hội viên...";
+
  try{
   const rows=await adminRequest("list_members");
   box.innerHTML="";
-  if(!rows||!rows.length){box.textContent="Chưa có hội viên.";return;}
+
+  if(!rows||!rows.length){
+   box.textContent="Chưa có hội viên.";
+   return;
+  }
+
   rows.forEach(m=>{
    const item=el("div","admin-item");
    item.append(el("p","","Telegram ID: "+m.telegram_id+(m.username?" · @"+m.username:"")));
    item.append(el("p","","Hạn thành viên: "+(m.expiry_date?new Date(m.expiry_date).toLocaleString("vi-VN"):"Chưa có")));
+
    const expired=m.expiry_date&&new Date(m.expiry_date)<=new Date();
    item.append(el("p","","Trạng thái: "+(expired?"end":m.status||"Chưa xác định")));
+
    const history=el("button","action-btn","Xem lịch sử bù ngày");
    history.onclick=()=>{
     document.getElementById("compTelegram").value=m.telegram_id;
     switchTab("compensateSection");
     loadHistory(m.telegram_id);
    };
+
    item.append(history);
    box.appendChild(item);
   });
- }catch(error){box.textContent="Lỗi: "+error.message;}
+ }catch(error){
+  box.textContent="Lỗi: "+error.message;
+ }
 }
 
 async function compensateMember(){
  const telegramId=Number(document.getElementById("compTelegram").value);
  const days=Number(document.getElementById("compDays").value);
  const reason=document.getElementById("compReason").value.trim();
- if(!Number.isSafeInteger(telegramId)||telegramId<=0){alert("Vui lòng nhập Telegram ID hợp lệ.");return;}
- if(!Number.isSafeInteger(days)||days<=0||days>3650){alert("Số ngày bù phải từ 1 đến 3650.");return;}
+
+ if(!Number.isSafeInteger(telegramId)||telegramId<=0){
+  alert("Vui lòng nhập Telegram ID hợp lệ.");
+  return;
+ }
+ if(!Number.isSafeInteger(days)||days<=0||days>3650){
+  alert("Số ngày bù phải từ 1 đến 3650.");
+  return;
+ }
  if(!confirm("Xác nhận bù "+days+" ngày cho Telegram ID "+telegramId+"?"))return;
+
  const btn=document.getElementById("compensateBtn");
  btn.disabled=true;
+
  try{
   const result=await adminRequest("compensate_member",{telegram_id:telegramId,days,reason});
   alert("Bù ngày thành công. Hạn mới: "+(result.new_expiry_date?new Date(result.new_expiry_date).toLocaleString("vi-VN"):"đã cập nhật"));
@@ -730,19 +911,33 @@ async function compensateMember(){
   document.getElementById("compReason").value="";
   await loadMembers();
   await loadHistory(telegramId);
- }catch(error){alert("Không bù được ngày: "+error.message);}
- finally{btn.disabled=false;}
+ }catch(error){
+  alert("Không bù được ngày: "+error.message);
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 async function loadHistory(telegramId){
  const id=Number(telegramId||document.getElementById("compTelegram").value);
  const box=document.getElementById("historyList");
- if(!Number.isSafeInteger(id)||id<=0){box.textContent="Nhập Telegram ID để xem lịch sử.";return;}
+
+ if(!Number.isSafeInteger(id)||id<=0){
+  box.textContent="Nhập Telegram ID để xem lịch sử.";
+  return;
+ }
+
  box.textContent="Đang tải lịch sử...";
+
  try{
   const rows=await adminRequest("member_history",{telegram_id:id});
   box.innerHTML="";
-  if(!rows||!rows.length){box.textContent="Hội viên này chưa có lịch sử bù ngày.";return;}
+
+  if(!rows||!rows.length){
+   box.textContent="Hội viên này chưa có lịch sử bù ngày.";
+   return;
+  }
+
   rows.forEach(h=>{
    const item=el("div","admin-item");
    item.append(el("p","","Đã bù: "+h.days_added+" ngày"));
@@ -751,15 +946,24 @@ async function loadHistory(telegramId){
    item.append(el("p","","Hạn mới: "+new Date(h.new_expiry_date).toLocaleString("vi-VN")));
    box.appendChild(item);
   });
- }catch(error){box.textContent="Lỗi: "+error.message;}
+ }catch(error){
+  box.textContent="Lỗi: "+error.message;
+ }
 }
 
 /* QUẢN LÝ PHIM */
 async function loadAdminFilms(){
- for(const id of ["seriesList","singleList"])document.getElementById(id).textContent="Đang tải danh sách phim...";
+ for(const id of ["seriesList","singleList"]){
+  document.getElementById(id).textContent="Đang tải danh sách phim...";
+ }
+
  try{
   const rows=await adminRequest("list_films");
   films=rows||[];
+
+  // Nạp lại phần phim công khai để danh sách tổng được cập nhật
+  await loadPublicPartMetadata();
+
   renderAdminFilmList("Phim bộ","seriesList");
   renderAdminFilmList("Phim lẻ","singleList");
   render();
@@ -772,10 +976,16 @@ async function loadAdminFilms(){
 function renderAdminFilmList(type,containerId){
  const box=document.getElementById(containerId);
  box.innerHTML="";
+
  const rows=films.filter(f=>f.film_type===type);
- if(!rows.length){box.textContent="Chưa có "+type.toLowerCase()+" nào.";return;}
+ if(!rows.length){
+  box.textContent="Chưa có "+type.toLowerCase()+" nào.";
+  return;
+ }
+
  rows.forEach(f=>{
   const item=el("div","admin-item");
+
   if(f.poster_url){
    const img=el("img");
    img.src=f.poster_url;
@@ -783,26 +993,32 @@ function renderAdminFilmList(type,containerId){
    img.onerror=()=>img.remove();
    item.appendChild(img);
   }
+
   item.append(el("p","","#"+f.id+" · "+(f.Title||"Chưa có tên")));
   item.append(el("p","","Phân loại: "+(f.section||"Chưa phân loại")+" · "+(f.status==="published"?"Đã đăng":"Bản nháp")));
   item.append(el("p","","Nhãn poster: "+(f.completion_status==="full"?"FULL":f.completion_status==="update"?"UPDATE":"Không có")));
+
   const edit=el("button","action-btn","Sửa thông tin");
   edit.onclick=()=>openFilmEditor(f,type);
   item.appendChild(edit);
+
   if(type==="Phim bộ"){
-   const episodes=el("button","action-btn","Quản lý tập");
+   const episodes=el("button","action-btn","Quản lý phần");
    episodes.onclick=()=>openEpisodes(f);
    item.appendChild(episodes);
   }
+
   const del=el("button","action-btn danger","Xóa phim");
   del.onclick=()=>deleteFilm(f);
   item.appendChild(del);
+
   box.appendChild(item);
  });
 }
 
 function openFilmEditor(f,type){
  const editing=!!f;
+
  document.getElementById("filmForm").reset();
  document.getElementById("editFilmId").value=editing?f.id:"";
  document.getElementById("editFilmType").value=type;
@@ -812,28 +1028,32 @@ function openFilmEditor(f,type){
  document.getElementById("filmDescription").value=editing?(f.description||""):"";
  document.getElementById("filmStatus").value=editing?(f.status||"published"):"published";
 
- // NẠP NHÃN FULL / UPDATE KHI SỬA PHIM
  document.getElementById("filmLabel").value=editing?(f.completion_status||""):"";
-
  document.getElementById("filmVideo").value=editing?(f.video_url||""):"";
  document.getElementById("oldPosterUrl").value=editing?(f.poster_url||""):"";
  document.getElementById("posterPreview").style.display="none";
+
  if(editing&&f.poster_url){
   document.getElementById("posterPreview").src=f.poster_url;
   document.getElementById("posterPreview").style.display="block";
  }
+
  document.getElementById("singleVideoField").style.display=type==="Phim lẻ"?"block":"none";
  document.getElementById("filmFormStatus").textContent="";
  document.getElementById("filmEditor").classList.add("show");
 }
 
-function closeFilmEditor(){document.getElementById("filmEditor").classList.remove("show");}
+function closeFilmEditor(){
+ document.getElementById("filmEditor").classList.remove("show");
+}
 
 async function uploadPoster(file){
  if(!file)return null;
+
  const allowed=["image/jpeg","image/png","image/webp"];
  if(!allowed.includes(file.type))throw new Error("Ảnh chỉ được là JPG, PNG hoặc WEBP.");
  if(file.size>5*1024*1024)throw new Error("Ảnh phải nhỏ hơn 5 MB.");
+
  const base64=await new Promise((resolve,reject)=>{
   const reader=new FileReader();
   reader.onload=()=>{
@@ -843,6 +1063,7 @@ async function uploadPoster(file){
   reader.onerror=()=>reject(new Error("Không đọc được ảnh."));
   reader.readAsDataURL(file);
  });
+
  const result=await adminRequest("upload_poster",{image_base64:base64,content_type:file.type});
  if(!result||!result.poster_url)throw new Error("Máy chủ chưa trả về đường dẫn ảnh.");
  return result.poster_url;
@@ -850,16 +1071,23 @@ async function uploadPoster(file){
 
 async function saveFilm(event){
  event.preventDefault();
+
  const btn=document.getElementById("saveFilmBtn");
  const status=document.getElementById("filmFormStatus");
  btn.disabled=true;
  status.textContent="Đang lưu phim...";
+
  try{
   const id=document.getElementById("editFilmId").value;
   const type=document.getElementById("editFilmType").value;
   const file=document.getElementById("posterFile").files[0];
+
   let posterUrl=document.getElementById("oldPosterUrl").value;
-  if(file){status.textContent="Đang tải poster lên...";posterUrl=await uploadPoster(file);}
+  if(file){
+   status.textContent="Đang tải poster lên...";
+   posterUrl=await uploadPoster(file);
+  }
+
   const payload={
    title:document.getElementById("filmTitle").value.trim(),
    poster_url:posterUrl||"",
@@ -867,33 +1095,40 @@ async function saveFilm(event){
    section:document.getElementById("filmSection").value.trim(),
    film_type:type,
    status:document.getElementById("filmStatus").value,
-
-   // LƯU NHÃN FULL / UPDATE
    completion_status:document.getElementById("filmLabel").value
   };
+
   if(type==="Phim lẻ")payload.video_url=document.getElementById("filmVideo").value.trim();
+
   if(id)await adminRequest("update_film",{film_id:Number(id),...payload});
   else await adminRequest("create_film",payload);
+
   status.textContent="Đã lưu phim thành công.";
   await loadAdminFilms();
   setTimeout(closeFilmEditor,500);
- }catch(error){status.textContent="Lỗi: "+error.message;}
- finally{btn.disabled=false;}
+ }catch(error){
+  status.textContent="Lỗi: "+error.message;
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 async function deleteFilm(f){
  if(!confirm('Bạn có chắc muốn xóa phim "'+f.Title+'"?'))return;
+
  try{
   await adminRequest("delete_film",{film_id:f.id});
   alert("Đã xóa phim.");
   await loadAdminFilms();
- }catch(error){alert("Không xóa được: "+error.message);}
+ }catch(error){
+  alert("Không xóa được: "+error.message);
+ }
 }
 
-/* QUẢN LÝ TẬP PHIM */
+/* QUẢN LÝ PHẦN PHIM */
 async function openEpisodes(f){
  currentEpisodeFilm=f;
- document.getElementById("episodeHeading").textContent="Quản lý tập phim";
+ document.getElementById("episodeHeading").textContent="Quản lý phần phim";
  document.getElementById("episodeFilmName").textContent=f.Title+" · Mã phim: "+f.id;
  resetEpisodeForm();
  document.getElementById("episodeModal").classList.add("show");
@@ -903,48 +1138,82 @@ async function openEpisodes(f){
 function resetEpisodeForm(){
  document.getElementById("episodeForm").reset();
  document.getElementById("episodeEditId").value="";
- document.getElementById("episodeFormHeading").textContent="Thêm tập phim";
- document.getElementById("saveEpisodeBtn").textContent="Lưu tập phim";
+ document.getElementById("episodeFormHeading").textContent="Thêm phần phim";
+ document.getElementById("saveEpisodeBtn").textContent="Lưu phần phim";
 }
 
 async function loadEpisodes(){
  const box=document.getElementById("episodesList");
- box.textContent="Đang tải danh sách tập...";
+ box.textContent="Đang tải danh sách phần...";
+
  try{
   const rows=await adminRequest("list_episodes",{film_id:currentEpisodeFilm.id});
   box.innerHTML="";
-  if(!rows||!rows.length){box.textContent="Phim này chưa có tập phim.";return;}
+
+  if(!rows||!rows.length){
+   box.textContent="Phim này chưa có phần phim.";
+   return;
+  }
+
   rows.forEach(ep=>{
    const item=el("div","admin-item");
-   item.append(el("p","","Tập "+ep.episode_number+" · "+(ep.title||"")));
+   item.append(el("p","","Phần "+ep.episode_number+" · "+(ep.title||"")));
    item.append(el("p","","Đường dẫn: "+ep.video_url));
-   const edit=el("button","action-btn","Sửa tập");
+
+   const edit=el("button","action-btn","Sửa phần");
    edit.onclick=()=>{
     document.getElementById("episodeEditId").value=ep.id;
     document.getElementById("episodeNumber").value=ep.episode_number;
     document.getElementById("episodeTitle").value=ep.title||"";
     document.getElementById("episodeVideo").value=ep.video_url||"";
-    document.getElementById("episodeFormHeading").textContent="Sửa tập "+ep.episode_number;
-    document.getElementById("saveEpisodeBtn").textContent="Cập nhật tập";
+    document.getElementById("episodeFormHeading").textContent="Sửa Phần "+ep.episode_number;
+    document.getElementById("saveEpisodeBtn").textContent="Cập nhật phần";
     document.getElementById("episodeModal").querySelector(".dialog").scrollTo({top:0,behavior:"smooth"});
    };
-   const del=el("button","action-btn danger","Xóa tập");
+
+   const del=el("button","action-btn danger","Xóa phần");
    del.onclick=async()=>{
-    if(!confirm("Bạn chắc chắn muốn xóa tập "+ep.episode_number+"?"))return;
-    try{await adminRequest("delete_episode",{episode_id:ep.id});await loadEpisodes();}
-    catch(error){alert("Không xóa được: "+error.message);}
+    if(!confirm("Bạn chắc chắn muốn xóa Phần "+ep.episode_number+"?"))return;
+    try{
+     await adminRequest("delete_episode",{episode_id:ep.id});
+     await loadEpisodes();
+     await refreshPublicPartsForCurrentFilm();
+    }catch(error){
+     alert("Không xóa được: "+error.message);
+    }
    };
+
    item.append(edit,del);
    box.appendChild(item);
   });
- }catch(error){box.textContent="Lỗi: "+error.message;}
+ }catch(error){
+  box.textContent="Lỗi: "+error.message;
+ }
+}
+
+async function refreshPublicPartsForCurrentFilm(){
+ if(!currentEpisodeFilm)return;
+
+ try{
+  currentEpisodeFilm.publicParts=await publicPartsRequest(currentEpisodeFilm.id);
+  currentEpisodeFilm.publicParts.sort((a,b)=>a.episode_number-b.episode_number);
+
+  const film=films.find(f=>String(f.id)===String(currentEpisodeFilm.id));
+  if(film)film.publicParts=currentEpisodeFilm.publicParts;
+
+  render();
+ }catch(error){
+  console.error(error);
+ }
 }
 
 async function saveEpisode(event){
  event.preventDefault();
  if(!currentEpisodeFilm)return;
+
  const btn=document.getElementById("saveEpisodeBtn");
  btn.disabled=true;
+
  try{
   const id=document.getElementById("episodeEditId").value;
   const payload={
@@ -952,25 +1221,33 @@ async function saveEpisode(event){
    title:document.getElementById("episodeTitle").value.trim(),
    video_url:document.getElementById("episodeVideo").value.trim()
   };
+
   if(id)await adminRequest("update_episode",{episode_id:Number(id),...payload});
   else await adminRequest("create_episode",{film_id:currentEpisodeFilm.id,...payload});
-  alert("Đã lưu tập phim.");
+
+  alert("Đã lưu phần phim.");
   resetEpisodeForm();
   await loadEpisodes();
- }catch(error){alert("Không lưu được tập phim: "+error.message);}
- finally{btn.disabled=false;}
+  await refreshPublicPartsForCurrentFilm();
+ }catch(error){
+  alert("Không lưu được phần phim: "+error.message);
+ }finally{
+  btn.disabled=false;
+ }
 }
 
 function switchTab(id){
  document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
  document.querySelectorAll(".admin-tabs button").forEach(x=>x.classList.remove("active"));
  document.getElementById(id).classList.add("active");
+
  const button=document.querySelector('.admin-tabs button[data-tab="'+id+'"]');
  if(button)button.classList.add("active");
 }
 
 /* SỰ KIỆN GIAO DIỆN */
 document.getElementById("search").addEventListener("input",render);
+
 document.querySelectorAll(".chip").forEach(button=>{
  button.addEventListener("click",()=>{
   document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
@@ -982,23 +1259,31 @@ document.querySelectorAll(".chip").forEach(button=>{
 
 document.getElementById("accountBtn").onclick=openMembership;
 document.getElementById("membershipClose").onclick=closeMembership;
+
 document.getElementById("membershipModal").onclick=e=>{
  if(e.target.id==="membershipModal")closeMembership();
 };
+
 document.querySelectorAll(".choosePackage").forEach(button=>{
  button.onclick=()=>createPayment(Number(button.dataset.days));
 });
+
 document.getElementById("copyPaymentCode").onclick=copyPaymentCode;
+
 document.getElementById("paidBtn").onclick=()=>{
  if(!currentPayment)return;
  document.getElementById("paidMessage").textContent="Cảm ơn bạn. Giao dịch đã được ghi nhận ở trạng thái chờ. Quản trị viên sẽ kiểm tra và xác nhận thủ công.";
  document.getElementById("paidBtn").disabled=true;
  document.getElementById("paidBtn").textContent="Đã ghi nhận";
 };
-document.getElementById("openAdminBtn").onclick=openAdmin;
 
+document.getElementById("openAdminBtn").onclick=openAdmin;
 document.getElementById("close").onclick=closeFilmModal;
-document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeFilmModal();};
+
+document.getElementById("modal").onclick=e=>{
+ if(e.target.id==="modal")closeFilmModal();
+};
+
 document.getElementById("refreshPayments").onclick=loadPayments;
 document.getElementById("refreshMembers").onclick=loadMembers;
 document.getElementById("compensateBtn").onclick=compensateMember;
@@ -1007,6 +1292,7 @@ document.getElementById("historyBtn").onclick=()=>loadHistory();
 document.querySelectorAll(".admin-tabs button").forEach(button=>{
  button.onclick=()=>switchTab(button.dataset.tab);
 });
+
 document.getElementById("addSeriesBtn").onclick=()=>openFilmEditor(null,"Phim bộ");
 document.getElementById("addSingleBtn").onclick=()=>openFilmEditor(null,"Phim lẻ");
 document.getElementById("editorClose").onclick=closeFilmEditor;
@@ -1016,24 +1302,34 @@ document.getElementById("filmForm").onsubmit=saveFilm;
 document.getElementById("posterFile").onchange=()=>{
  const file=document.getElementById("posterFile").files[0];
  const preview=document.getElementById("posterPreview");
- if(!file){preview.style.display="none";return;}
+
+ if(!file){
+  preview.style.display="none";
+  return;
+ }
+
  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
   alert("Chỉ hỗ trợ JPG, PNG hoặc WEBP.");
   document.getElementById("posterFile").value="";
   preview.style.display="none";
   return;
  }
+
  if(file.size>5*1024*1024){
   alert("Ảnh phải nhỏ hơn 5 MB.");
   document.getElementById("posterFile").value="";
   preview.style.display="none";
   return;
  }
+
  preview.src=URL.createObjectURL(file);
  preview.style.display="block";
 };
 
-document.getElementById("episodeClose").onclick=()=>document.getElementById("episodeModal").classList.remove("show");
+document.getElementById("episodeClose").onclick=()=>{
+ document.getElementById("episodeModal").classList.remove("show");
+};
+
 document.getElementById("episodeForm").onsubmit=saveEpisode;
 document.getElementById("resetEpisodeBtn").onclick=resetEpisodeForm;
 
