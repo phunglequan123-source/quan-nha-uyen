@@ -45,8 +45,6 @@ main{max-width:1150px;margin:auto;padding:24px 20px 60px}
 .meta{font-size:12px;color:var(--muted)}
 .tag{display:inline-block;margin-top:8px;font-size:10px;color:var(--gold);border:1px solid #75664c;border-radius:10px;padding:2px 7px}
 .message{text-align:center;padding:35px 15px;color:var(--muted);grid-column:1/-1}
-
-/* DANH SÁCH PHIM TỔNG */
 .film-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
 .film-list-item{display:flex;align-items:center;gap:13px;padding:10px;background:var(--panel);border:1px solid #ffffff12;border-radius:12px;cursor:pointer;transition:.18s}
 .film-list-item:hover{border-color:var(--pink);background:#22242e}
@@ -59,7 +57,6 @@ main{max-width:1150px;margin:auto;padding:24px 20px 60px}
 .film-list-meta{color:var(--muted);font-size:12px}
 .film-list-parts{color:#d8bd8a;font-size:12px;margin-top:5px;line-height:1.7}
 .film-list-empty{text-align:center;padding:25px;color:var(--muted);background:var(--panel);border-radius:10px}
-
 footer{border-top:1px solid #ffffff12;color:var(--muted);text-align:center;padding:24px;font-size:12px}
 .modal{display:none;position:fixed;inset:0;background:#000b;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal.show{display:flex}
@@ -379,7 +376,6 @@ function render(){
  document.getElementById("count").textContent=data.length+" tác phẩm";
  document.getElementById("listCount").textContent=data.length+" phim";
 
- // POSTER LỚN
  grid.innerHTML="";
 
  if(!data.length){
@@ -417,7 +413,6 @@ function render(){
   });
  }
 
- // DANH SÁCH TỔNG: POSTER NHỎ BÊN TRÁI, THÔNG TIN BÊN PHẢI
  const list=document.getElementById("filmList");
  list.innerHTML="";
 
@@ -644,24 +639,55 @@ function closeFilmModal(){
  document.getElementById("watchBtn").style.display="none";
 }
 
+/* SUA: LINK TELEGRAM MO TRONG TELEGRAM, LINK MP4 PHAT TREN WEB */
 async function playVideoUrl(url){
- if(typeof url!=="string"||!url.trim())throw new Error("Không tìm thấy đường dẫn video.");
+ if(typeof url!=="string"||!url.trim()){
+  throw new Error("Không tìm thấy đường dẫn video.");
+ }
 
  let parsed;
- try{parsed=new URL(url);}
- catch(e){throw new Error("Đường dẫn video không hợp lệ.");}
+ try{
+  parsed=new URL(url);
+ }catch(e){
+  throw new Error("Đường dẫn video không hợp lệ.");
+ }
 
  if(parsed.protocol!=="https:"&&parsed.protocol!=="http:"){
   throw new Error("Đường dẫn video không hợp lệ.");
  }
 
+ if(
+  parsed.hostname==="t.me"||
+  parsed.hostname.endsWith(".t.me")||
+  parsed.hostname==="telegram.me"
+ ){
+  stopVideo();
+
+  if(tg&&typeof tg.openTelegramLink==="function"){
+   tg.openTelegramLink(parsed.href);
+  }else{
+   window.open(parsed.href,"_blank");
+  }
+
+  return;
+ }
+
  const player=document.getElementById("videoPlayer");
+
  player.pause();
  player.src=parsed.href;
+
  document.getElementById("playerArea").style.display="block";
+
  player.load();
- player.scrollIntoView({behavior:"smooth",block:"center"});
- try{await player.play();}catch(e){}
+ player.scrollIntoView({
+  behavior:"smooth",
+  block:"center"
+ });
+
+ try{
+  await player.play();
+ }catch(e){}
 }
 
 async function playFilm(){
@@ -675,7 +701,7 @@ async function playFilm(){
  try{
   const data=await watchRequest("get_film_video",{film_id:currentViewingFilm.id});
   await playVideoUrl(data.video_url);
-  notice.textContent="Đang phát phim.";
+  notice.textContent="Đã gửi yêu cầu mở video.";
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
@@ -728,7 +754,7 @@ async function playEpisode(ep,button){
  try{
   const data=await watchRequest("get_episode_video",{episode_id:ep.id});
   await playVideoUrl(data.video_url);
-  notice.textContent="Đang phát Phần "+ep.episode_number+".";
+  notice.textContent="Đã gửi yêu cầu mở Phần "+ep.episode_number+" trong Telegram.";
  }catch(error){
   notice.textContent=error.message;
   alert(error.message);
@@ -756,7 +782,7 @@ function openFilm(f){
   watchBtn.textContent="▶ Xem phim";
   watchBtn.style.display="inline-block";
   watchBtn.onclick=playFilm;
-  document.getElementById("watchNotice").textContent="Bấm Xem phim để kiểm tra hội viên và phát video.";
+  document.getElementById("watchNotice").textContent="Bấm Xem phim để kiểm tra hội viên và mở video.";
  }else if(f.film_type==="Phim bộ"){
   loadPublicEpisodes(f);
  }else{
@@ -961,7 +987,6 @@ async function loadAdminFilms(){
   const rows=await adminRequest("list_films");
   films=rows||[];
 
-  // Nạp lại phần phim công khai để danh sách tổng được cập nhật
   await loadPublicPartMetadata();
 
   renderAdminFilmList("Phim bộ","seriesList");
